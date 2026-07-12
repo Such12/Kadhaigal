@@ -16,6 +16,7 @@ export default {
       },
       fontFamily: {
         display: ['"Noto Serif"', 'ui-serif', 'Georgia', 'serif'],
+        head: ['"TAN St. Canard"', 'ui-serif', 'Georgia', 'serif'],
         body: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         hand: ['"Caveat"', 'cursive'],
       },
