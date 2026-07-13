@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import RootLayout from './app/layout.jsx'
+import AdminLayout from './app/admin/layout.jsx'
 
 // public pages
 import HomePage from './app/public/page.jsx'
@@ -8,6 +9,8 @@ import AboutPage from './app/public/about/page.jsx'
 import CafePage from './app/public/cafe/page.jsx'
 import EventsPage from './app/public/events/page.jsx'
 import BookstorePage from './app/public/bookstore/page.jsx'
+import KidsBookstorePage from './app/public/bookstore/kids/page.jsx'
+import GenrePage from './app/public/bookstore/genre/page.jsx'
 import BookDetailPage from './app/public/bookstore/id/page.jsx'
 import ContactPage from './app/public/contact/page.jsx'
 
@@ -22,22 +25,26 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* public */}
         <Route element={<RootLayout />}>
-          {/* public */}
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="cafe" element={<CafePage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="bookstore" element={<BookstorePage />} />
+          <Route path="bookstore/kids" element={<KidsBookstorePage />} />
+          <Route path="bookstore/genre/:genre" element={<GenrePage />} />
           <Route path="bookstore/:id" element={<BookDetailPage />} />
           <Route path="contact" element={<ContactPage />} />
+        </Route>
 
-          {/* admin */}
-          <Route path="admin" element={<AdminDashboardPage />} />
-          <Route path="admin/books" element={<AdminBooksPage />} />
-          <Route path="admin/events" element={<AdminEventsPage />} />
-          <Route path="admin/orders" element={<AdminOrdersPage />} />
-          <Route path="admin/settings" element={<AdminSettingsPage />} />
+        {/* admin */}
+        <Route path="admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboardPage />} />
+          <Route path="books" element={<AdminBooksPage />} />
+          <Route path="events" element={<AdminEventsPage />} />
+          <Route path="orders" element={<AdminOrdersPage />} />
+          <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

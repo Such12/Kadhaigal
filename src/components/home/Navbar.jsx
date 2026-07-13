@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { ShoppingBag, User, Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 
@@ -18,16 +19,18 @@ export default function Navbar() {
         <Logo />
 
         <ul className="hidden md:flex items-center gap-10 text-[15px] font-medium text-brand-navy">
-          {links.map((link, i) => (
+          {links.map((link) => (
             <li key={link.label}>
-              <a
-                href={link.href}
-                className={`transition-colors hover:text-brand-brick ${
-                  i === 0 ? 'underline underline-offset-8 decoration-brand-navy' : ''
-                }`}
+              <NavLink
+                to={link.href}
+                className={({ isActive }) =>
+                  `transition-colors hover:text-brand-brick ${
+                    isActive ? 'underline underline-offset-8 decoration-brand-navy' : ''
+                  }`
+                }
               >
                 {link.label}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -55,9 +58,15 @@ export default function Navbar() {
           <ul className="flex flex-col gap-4 text-brand-navy font-medium">
             {links.map((link) => (
               <li key={link.label}>
-                <a href={link.href} onClick={() => setOpen(false)}>
+                <NavLink
+                  to={link.href}
+                  onClick={() => setOpen(false)}
+                  className={({ isActive }) =>
+                    isActive ? 'underline underline-offset-8 decoration-brand-navy' : ''
+                  }
+                >
                   {link.label}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
