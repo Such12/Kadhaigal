@@ -1,13 +1,13 @@
 import Chintu from '../../assets/images/chintu w specs.svg'
 import Pintoo from '../../assets/images/pintu w specs_3.svg'
-import leftarrow from '../../assets/images/left arrow.svg'
-import rightarrow from '../../assets/images/right arrow.svg'
+import leftarrow from '../../assets/images/left arrow-cropped.svg'
+import rightarrow from '../../assets/images/right arrow-cropped.svg'
 
 export default function MascotsSection() {
   return (
     <section className="relative container-page py-16 sm:py-20">
       
-      <div className="grid sm:grid-cols-3 gap-10 sm:gap-6 items-center">
+      <div className="grid sm:grid-cols-3 gap-8 sm:gap-6 items-center">
         
         {/* Chintu Column */}
         <div className="relative flex flex-col items-center text-center">
@@ -48,7 +48,7 @@ export default function MascotsSection() {
             <img src={Pintoo} alt="Pintoo" className="w-40 sm:w-48" />
             
             {/* Right Arrow Bounding Box Wrapper */}
-            <div className="hidden sm:block absolute -right-44 bottom-4 w-40 h-40 z-10">
+            <div className="hidden sm:block absolute -right-40 bottom-4 w-40 h-40 z-10">
               <img 
                 src={rightarrow} 
                 alt="" 
