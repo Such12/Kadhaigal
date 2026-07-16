@@ -8,7 +8,7 @@ export default function ShopByCategory({
   viewAllHref = '/bookstore',
 }) {
   return (
-    <section className="container-page py-16 sm:py-20">
+    <section className="container-page pt-20 sm:pt-28 pb-16 sm:pb-20">
       <div className="flex items-center justify-between mb-10">
         <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy">
           {title}

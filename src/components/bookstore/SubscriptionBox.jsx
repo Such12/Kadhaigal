@@ -11,7 +11,7 @@ const highlights = [
 
 export default function SubscriptionBox() {
   return (
-    <section className="bg-[#E9E0CB]">
+    <section className="bg-[#F5F5DC]">
       <div className="container-page py-16 sm:py-20 grid md:grid-cols-2 gap-12 items-center">
         <ImagePlaceholder
           label="Chintu & Pintoo on a stack of books illustration"

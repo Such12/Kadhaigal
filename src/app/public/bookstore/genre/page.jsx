@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import BookListingCard from '../../../../components/bookstore/BookListingCard.jsx'
 import BookFilters from '../../../../components/bookstore/BookFilters.jsx'
-import SearchBar from '../../../../components/bookstore/SearchBar.jsx'
+import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import { getBooksByGenre, getBooksBySubGenre } from '../../../../lib/booksStore.js'
 import { categories } from '../../../../data/categories.js'
 import { kidsCategories } from '../../../../data/kidsCategories.js'
@@ -16,8 +16,7 @@ export default function GenrePage() {
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({ price: [] })
   const [query, setQuery] = useState('')
-  const [showSticky, setShowSticky] = useState(false)
-  const titleRef = useRef(null)
+  const [sortBy, setSortBy] = useState('featured')
 
   const category = allCategories.find((c) => c.slug === slug)
   const genreName = category?.name ?? slug
@@ -34,40 +33,18 @@ export default function GenrePage() {
     })
   }, [genreName, category])
 
-  useEffect(() => {
-    function onScroll() {
-      const headerHeight = 80
-      const rect = titleRef.current?.getBoundingClientRect()
-      if (!rect) return
-      setShowSticky(rect.top <= headerHeight)
-    }
-    
-    // Check immediately on mount
-    setTimeout(onScroll, 0)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-    }
-  }, [titleRef])
-
   return (
-    <div className="container-page py-16">
-      <div ref={titleRef} className="text-center max-w-2xl mx-auto">
-        <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-brand-navy">
-          {genreName}
-        </h1>
-        {category?.description && (
-          <p className="text-brand-navy/60 mt-4">{category.description}</p>
-        )}
-      </div>
-
-      <div className={`fixed left-1/2 transform -translate-x-1/2 top-20 z-50 w-full max-w-7xl px-5 sm:px-8 lg:px-12 bg-brand-cream/95 transition-opacity duration-200 ${showSticky ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className="max-w-3xl mx-auto py-4">
-          <SearchBar value={query} onChange={setQuery} />
+    <>
+      <BookstoreNavbar />
+      <div className="container-page py-16">
+        <div className="text-center max-w-2xl mx-auto">
+          <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-brand-navy">
+            {genreName}
+          </h1>
+          {category?.description && (
+            <p className="text-brand-navy/60 mt-4">{category.description}</p>
+          )}
         </div>
-      </div>
 
       <div className="mt-12 grid grid-cols-1 lg:grid-cols-[minmax(220px,260px)_1fr] gap-8">
         <aside className="hidden lg:block">
@@ -94,9 +71,22 @@ export default function GenrePage() {
           </div>
 
           <div className="flex items-center justify-between border-y border-brand-navy/10 py-3 mb-6 text-xs sm:text-sm">
-            <p className="text-brand-navy/50 uppercase tracking-wide">
-              Sort By: <span className="text-brand-navy font-medium normal-case">Featured</span>
-            </p>
+            <div className="flex items-center gap-2">
+              <label htmlFor="sort-by" className="text-brand-navy/50 uppercase tracking-wide">
+                Sort By:
+              </label>
+              <select
+                id="sort-by"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-white border border-brand-navy/10 shadow-sm rounded-lg px-3 py-1.5 text-brand-navy font-medium outline-none cursor-pointer focus:ring-2 focus:ring-brand-brick/50 focus:border-brand-brick"
+              >
+                <option value="featured">Featured</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="discount">Discount</option>
+              </select>
+            </div>
             <p className="text-brand-navy/50">
               {loading ? 'Loading…' : `Showing ${books.length} of ${books.length} results`}
             </p>
@@ -123,6 +113,12 @@ export default function GenrePage() {
                   }
                   return true
                 })
+                .sort((a, b) => {
+                  if (sortBy === 'price-asc') return (a.price || 0) - (b.price || 0)
+                  if (sortBy === 'price-desc') return (b.price || 0) - (a.price || 0)
+                  if (sortBy === 'discount') return (b.discount || 0) - (a.discount || 0)
+                  return 0 // featured (default order)
+                })
                 .map((book) => (
                   <BookListingCard key={book.id} book={book} />
                 ))}
@@ -130,6 +126,7 @@ export default function GenrePage() {
           )}
         </main>
       </div>
-    </div>
+      </div>
+    </>
   )
 }

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { BookOpen, Heart } from 'lucide-react'
 import ImagePlaceholder from '../../../../components/ui/ImagePlaceholder.jsx'
 import Button from '../../../../components/ui/Button.jsx'
+import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import CuratorNote from '../../../../components/bookstore/CuratorNote.jsx'
 import RelatedBooks from '../../../../components/bookstore/RelatedBooks.jsx'
 import { getBookById, getBooksByGenre } from '../../../../lib/booksStore.js'
@@ -26,26 +27,34 @@ export default function BookDetailPage() {
   }, [id])
 
   if (loading) {
-    return <div className="container-page py-16 text-brand-navy/50">Loading…</div>
+    return (
+      <>
+        <BookstoreNavbar />
+        <div className="container-page py-16 text-brand-navy/50">Loading…</div>
+      </>
+    )
   }
 
   if (!book) {
     return (
-      <div className="container-page py-16 text-center">
-        <h1 className="font-display font-bold text-2xl text-brand-navy">
-          Book not found
-        </h1>
-        <Link to="/bookstore" className="text-brand-brick underline mt-4 inline-block">
-          Back to the Stacks
-        </Link>
-      </div>
+      <>
+        <BookstoreNavbar />
+        <div className="container-page py-16 text-center">
+          <h1 className="font-display font-bold text-2xl text-brand-navy">Book not found</h1>
+          <Link to="/bookstore" className="text-brand-brick underline mt-4 inline-block">
+            Back to the Stacks
+          </Link>
+        </div>
+      </>
     )
   }
 
   const descriptionParagraphs = (book.description ?? '').split('\n\n').filter(Boolean)
 
   return (
-    <div className="container-page py-16">
+    <>
+      <BookstoreNavbar />
+      <div className="container-page py-16">
       {/* Top: cover + primary info */}
       <div className="grid md:grid-cols-[340px_1fr] gap-10 items-start">
         <ImagePlaceholder
@@ -127,6 +136,7 @@ export default function BookDetailPage() {
       </div>
 
       <RelatedBooks books={related} />
-    </div>
+      </div>
+    </>
   )
 }

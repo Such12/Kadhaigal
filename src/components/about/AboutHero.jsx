@@ -14,10 +14,6 @@ export default function AboutHero() {
           <br />
           KADHAIGAL
         </h1>
-
-        <button className="mt-8 bg-brand-cream/90 hover:bg-brand-cream text-brand-navy text-xs sm:text-sm font-semibold tracking-wide uppercase px-6 py-3 rounded-full shadow-card transition-colors">
-          Let&apos;s Collaborate
-        </button>
       </div>
     </section>
   )

@@ -7,6 +7,7 @@ import VisitLocation from '../../components/home/VisitLocation.jsx'
 import JoinCommunity from '../../components/home/JoinCommunity.jsx'
 import ChapterOne from '../../components/home/ChapterOne.jsx'
 import TableOfContents from '../../components/home/TableofContents.jsx'
+import MenuPreview from '../../components/home/MenuPreview.jsx' 
 
 export default function HomePage() {
   return (
@@ -17,6 +18,7 @@ export default function HomePage() {
       {/* <OurStory /> */}
       {/* <ThreePillars /> */}
       <BookCarousel />
+      <MenuPreview/>
       <EventsNoticeboard />
       <VisitLocation />
       <JoinCommunity />

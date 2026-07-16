@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 import RootLayout from './app/layout.jsx'
 import AdminLayout from './app/admin/layout.jsx'
@@ -6,7 +7,6 @@ import AdminLayout from './app/admin/layout.jsx'
 // public pages
 import HomePage from './app/public/page.jsx'
 import AboutPage from './app/public/about/page.jsx'
-import CafePage from './app/public/cafe/page.jsx'
 import EventsPage from './app/public/events/page.jsx'
 import BookstorePage from './app/public/bookstore/page.jsx'
 import KidsBookstorePage from './app/public/bookstore/kids/page.jsx'
@@ -24,12 +24,12 @@ import AdminSettingsPage from './app/admin/settings/page.jsx'
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* public */}
         <Route element={<RootLayout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
-          <Route path="cafe" element={<CafePage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="bookstore" element={<BookstorePage />} />
           <Route path="bookstore/kids" element={<KidsBookstorePage />} />

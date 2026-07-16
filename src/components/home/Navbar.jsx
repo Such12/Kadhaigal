@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { ShoppingBag, User, Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 
 const links = [
-  { label: 'Books', href: '/bookstore' },
+  { label: 'Books', href: '/bookstore', end: true },
+  { label: "Children's Books", href: '/bookstore/kids' },
   { label: 'Events', href: '/events' },
   { label: 'About', href: '/about' },
   { label: 'Contact Us', href: '/contact' },
@@ -12,6 +13,10 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
+
+  // Bookstore pages have their own BookstoreNavbar
+  if (pathname.startsWith('/bookstore')) return null
 
   return (
     <header className="sticky top-0 z-50 bg-brand-cream/95 backdrop-blur border-b border-brand-navy/5">
@@ -23,6 +28,7 @@ export default function Navbar() {
             <li key={link.label}>
               <NavLink
                 to={link.href}
+                end={link.end}
                 className={({ isActive }) =>
                   `transition-colors hover:text-brand-brick ${
                     isActive ? 'underline underline-offset-8 decoration-brand-navy' : ''

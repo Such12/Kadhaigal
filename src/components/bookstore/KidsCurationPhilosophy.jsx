@@ -10,7 +10,7 @@ const promises = [
 
 export default function KidsCurationPhilosophy() {
   return (
-    <section className="bg-white">
+    <section className="bg-[#F5F5DC]">
       <div className="container-page py-16 sm:py-20 grid md:grid-cols-2 gap-12 items-center">
         <ImagePlaceholder
           label="A child reading illustration"
