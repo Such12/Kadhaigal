@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import KidsBooksHero from '../../../../components/bookstore/KidsBooksHero.jsx'
-import KidsCurationPhilosophy from '../../../../components/bookstore/KidsCurationPhilosophy.jsx'
 import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import StaffPicks from '../../../../components/bookstore/StaffPicks.jsx'
 import KidsCategories from '../../../../components/bookstore/KidsCategories.jsx'
@@ -20,7 +19,6 @@ export default function KidsBookstorePage() {
     <>
       <BookstoreNavbar />
       <KidsBooksHero />
-      <KidsCurationPhilosophy />
       <section id="kids-staff-picks">
         <StaffPicks books={staffPicks} />
       </section>

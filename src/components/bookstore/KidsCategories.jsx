@@ -1,68 +1,50 @@
 import { Link } from 'react-router-dom'
-import { Book, Wand2, GraduationCap, Scroll, BookOpen, Calendar } from 'lucide-react'
-import { kidsCategories } from '../../data/kidsCategories.js'
+import { ArrowUpRight } from 'lucide-react'
+import faceBaby from '../../assets/images/face_icon_baby.png'
+import faceToddler from '../../assets/images/face_icon_toddler.png'
+import faceGirl from '../../assets/images/face_icon_girl.png'
+import faceBoy from '../../assets/images/face_icon_boy.png'
+import faceTeen from '../../assets/images/face_icon_teen.png'
 
-// Map each category slug to a Lucide icon
-const iconMap = {
-  'picture-books': Book,
-  'kids-fantasy': Wand2,
-  'young-adult': GraduationCap,
-  'fairy-tales': Scroll,
-}
-
-// Fallback extras to fill out 6 items like the mockup
-const extraCategories = [
-  { name: 'All Books', slug: 'all', icon: BookOpen },
-  { name: 'Events', slug: 'events', icon: Calendar },
+const ageCategories = [
+  { name: '0-2 Years', slug: '0-2-years', icon: faceBaby },
+  { name: '3-5 Years', slug: '3-5-years', icon: faceToddler },
+  { name: '6-8 Years', slug: '6-8-years', icon: faceGirl },
+  { name: '9-12 Years', slug: '9-12-years', icon: faceBoy },
+  { name: 'Young Adult', slug: 'young-adult', icon: faceTeen },
+  { name: 'View All', slug: 'all', icon: null },
 ]
 
 export default function KidsCategories() {
-  const mainItems = kidsCategories.map((c) => ({
-    name: c.name,
-    slug: c.slug,
-    icon: iconMap[c.slug] || Book,
-    href: c.slug === 'events' ? '/events' : `/bookstore/genre/${c.slug}`,
-  }))
-
-  const allItems = [
-    ...mainItems,
-    ...extraCategories.map((e) => ({
-      ...e,
-      href: e.slug === 'events' ? '/events' : `/bookstore/genre/${e.slug}`,
-    })),
-  ]
-
   return (
-    <section className="py-12 sm:py-16 bg-[#F5F5DC]">
-      <div className="container-page max-w-4xl mx-auto">
-        <h2 className="font-display font-medium text-3xl text-brand-navy mb-10">
-          Shop By Category
+    <section className="py-20 sm:py-24 bg-brand-cream">
+      <div className="container-page max-w-5xl mx-auto flex flex-col items-center">
+        <h2 className="font-display font-bold text-4xl sm:text-5xl text-brand-navy text-center mb-3">
+          Books by Age, Stories for All
         </h2>
+        <p className="text-brand-navy/80 text-center mb-16 text-sm sm:text-base max-w-lg">
+          Thoughtfully curated reads for every growing age.
+        </p>
 
-        <div className="flex flex-wrap gap-8 sm:gap-12 items-start">
-          {allItems.map((item) => {
-            const Icon = item.icon
-            return (
-              <Link
-                key={item.slug}
-                to={item.href}
-                className="group flex flex-col items-center gap-2.5 w-16 sm:w-20"
-              >
-                {/* Circular sage-green icon button */}
-                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#A5C089] flex items-center justify-center shadow-sm group-hover:bg-[#8da773] transition-colors duration-300">
-                  <Icon
-                    size={26}
-                    strokeWidth={1.5}
-                    className="text-[#2d4a1e]"
-                  />
-                </div>
-                {/* Label */}
-                <span className="font-body text-[11px] sm:text-xs text-brand-navy/80 text-center leading-tight font-medium">
-                  {item.name}
-                </span>
-              </Link>
-            )
-          })}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10">
+          {ageCategories.map((cat) => (
+            <Link
+              key={cat.slug}
+              to={cat.slug === 'all' ? '/bookstore/kids#all' : `/bookstore/genre/${cat.slug}`}
+              className="group flex flex-col items-center gap-4 w-20 sm:w-24 md:w-28"
+            >
+              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-[2px] border-brand-navy bg-[#FAFAD2] flex items-center justify-center shadow-[0_12px_24px_-8px_rgba(20,41,80,0.3)] group-hover:-translate-y-2 transition-transform duration-300 overflow-hidden">
+                {cat.icon ? (
+                  <img src={cat.icon} alt={cat.name} className="w-[80%] h-[80%] object-contain mix-blend-multiply" />
+                ) : (
+                  <ArrowUpRight size={36} strokeWidth={2} className="text-brand-navy" />
+                )}
+              </div>
+              <span className="font-body text-xs sm:text-sm font-semibold text-brand-navy/80 text-center">
+                {cat.name}
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
