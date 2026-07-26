@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { NavLink, useNavigate, Link } from 'react-router-dom'
 import { X, ShoppingBag, User, Search } from 'lucide-react'
+import { categories } from '../../data/categories.js'
 
 const links = [
   { label: 'Books', href: '/bookstore', end: true },
@@ -10,24 +11,35 @@ const links = [
   { label: 'Contact Us', href: '/contact' },
 ]
 
-/**
- * Shared bookstore navbar used on all /bookstore* pages.
- *
- * Props:
- *   query        — controlled search value (optional, used on main bookstore page)
- *   onQueryChange — callback when search input changes (optional)
- *
- * When onQueryChange is not provided, pressing Enter in the search box
- * navigates the user to /bookstore?q=<value> so they land on search results.
- */
 export default function BookstoreNavbar({ query = '', onQueryChange }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const [localQuery, setLocalQuery] = useState('')
+  const inputRef = useRef(null)
   const navigate = useNavigate()
 
-  // If a controlled handler is provided, use it; otherwise use local state + navigate
   const isControlled = typeof onQueryChange === 'function'
   const inputValue = isControlled ? query : localQuery
+
+  // Auto-focus input when overlay opens
+  useEffect(() => {
+    if (searchOpen) {
+      setTimeout(() => inputRef.current?.focus(), 80)
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [searchOpen])
+
+  // Close on Escape
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') setSearchOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   function handleChange(e) {
     if (isControlled) {
@@ -38,45 +50,44 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
   }
 
   function handleKeyDown(e) {
-    if (!isControlled && e.key === 'Enter' && localQuery.trim()) {
-      navigate(`/bookstore?q=${encodeURIComponent(localQuery.trim())}`)
+    if (e.key === 'Enter') {
+      if (isControlled) {
+        setSearchOpen(false)
+      } else if (localQuery.trim()) {
+        navigate(`/bookstore?q=${encodeURIComponent(localQuery.trim())}`)
+        setSearchOpen(false)
+      }
     }
+  }
+
+  function handleCategoryClick() {
+    setSearchOpen(false)
   }
 
   return (
     <>
+      {/* ── Main header bar ── */}
       <header className="relative z-30 flex items-center px-6 sm:px-10 lg:px-16 py-5 bg-brand-cream">
-        {/* Logo */}
         <a href="/" className="flex items-center shrink-0">
           <img src="/logo.svg" alt="Kadhaigal" className="h-10 sm:h-12 w-auto" />
         </a>
 
-        {/* Search bar — absolutely centered */}
-        <div className="absolute left-1/2 -translate-x-1/2 w-64 sm:w-96">
-          <label className="relative block">
-            <span className="sr-only">Search</span>
-            <span className="absolute inset-y-0 left-3 flex items-center text-brand-navy/50">
-              <Search size={16} />
-            </span>
-            <input
-              value={inputValue}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Search by Title, Author or ISBN"
-              className="w-full border border-brand-navy/10 rounded-full pl-9 pr-4 py-2 bg-white text-xs placeholder:text-brand-navy/40 shadow-card focus:outline-none focus:border-brand-brick/40 transition-colors"
-            />
-          </label>
-        </div>
-
-        {/* Right side icons + hamburger */}
         <div className="ml-auto flex items-center gap-4 text-brand-navy shrink-0">
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search"
+            className="hover:text-brand-brick transition-colors"
+          >
+            <Search size={20} strokeWidth={1.8} />
+          </button>
+
           <button aria-label="Cart" className="hover:text-brand-brick transition-colors hidden sm:block">
             <ShoppingBag size={20} strokeWidth={1.8} />
           </button>
           <button aria-label="Account" className="hover:text-brand-brick transition-colors hidden sm:block">
             <User size={20} strokeWidth={1.8} />
           </button>
-          {/* Hamburger */}
+
           <button
             onClick={() => setDrawerOpen(true)}
             aria-label="Open menu"
@@ -89,7 +100,82 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
         </div>
       </header>
 
-      {/* Backdrop */}
+      {/* ── Full-screen search overlay ── */}
+      <div
+        className={`fixed inset-0 z-50 bg-brand-cream transition-opacity duration-300 ${
+          searchOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="h-full overflow-y-auto">
+          <div className="container-page max-w-4xl py-10 sm:py-14">
+
+            {/* Close button */}
+            <button
+              onClick={() => setSearchOpen(false)}
+              aria-label="Close search"
+              className="text-brand-navy hover:text-brand-brick transition-colors mb-10"
+            >
+              <X size={26} strokeWidth={1.5} />
+            </button>
+
+            {/* SEARCH label */}
+            <p className="font-display font-extrabold text-xs tracking-[0.25em] uppercase text-brand-navy mb-4">
+              Search
+            </p>
+
+            {/* Underline input — minimal, like the reference */}
+            <div className="relative border-b border-brand-navy/20 mb-12">
+              <input
+                ref={inputRef}
+                value={inputValue}
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Search by title, author or ISBN…"
+                className="w-full bg-transparent py-3 pr-10 text-xl sm:text-2xl font-display text-brand-navy placeholder:text-brand-navy/30 focus:outline-none"
+              />
+              {inputValue ? (
+                <button
+                  onClick={() => isControlled ? onQueryChange('') : setLocalQuery('')}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-navy/40 hover:text-brand-brick transition-colors"
+                  aria-label="Clear"
+                >
+                  <X size={18} />
+                </button>
+              ) : (
+                <Search size={18} className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-navy/30" />
+              )}
+            </div>
+
+            {/* CATEGORIES section */}
+            <p className="font-display font-extrabold text-xs tracking-[0.25em] uppercase text-brand-navy mb-5">
+              Categories
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              {categories.map((cat) => (
+                <Link
+                  key={cat.slug}
+                  to={`/bookstore/genre/${cat.slug}`}
+                  onClick={handleCategoryClick}
+                  className="px-4 py-2 rounded-full border border-brand-navy/15 bg-brand-cream text-brand-navy text-sm font-body font-medium hover:bg-brand-navy hover:text-brand-cream transition-colors duration-200"
+                >
+                  {cat.name}
+                </Link>
+              ))}
+              <Link
+                to="/bookstore/kids"
+                onClick={handleCategoryClick}
+                className="px-4 py-2 rounded-full border border-brand-navy/15 bg-brand-cream text-brand-navy text-sm font-body font-medium hover:bg-brand-navy hover:text-brand-cream transition-colors duration-200"
+              >
+                Children's Books
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ── Nav drawer backdrop ── */}
       {drawerOpen && (
         <div
           className="fixed inset-0 z-40 bg-brand-navy/40 backdrop-blur-sm"
@@ -98,7 +184,7 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
         />
       )}
 
-      {/* Slide-out drawer */}
+      {/* ── Slide-out nav drawer ── */}
       <div
         className={`fixed top-0 right-0 z-50 h-full w-72 bg-brand-cream shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
           drawerOpen ? 'translate-x-0' : 'translate-x-full'
