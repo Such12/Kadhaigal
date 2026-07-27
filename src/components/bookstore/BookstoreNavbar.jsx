@@ -72,20 +72,20 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
           <img src="/logo.svg" alt="Kadhaigal" className="h-10 sm:h-12 w-auto" />
         </a>
 
-        <div className="ml-auto flex items-center gap-4 text-brand-navy shrink-0">
+        <div className="ml-auto flex items-center gap-5 text-brand-navy shrink-0">
           <button
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
             className="hover:text-brand-brick transition-colors"
           >
-            <Search size={20} strokeWidth={1.8} />
+            <Search size={25} strokeWidth={1.8} />
           </button>
 
           <button aria-label="Cart" className="hover:text-brand-brick transition-colors hidden sm:block">
-            <ShoppingBag size={20} strokeWidth={1.8} />
+            <ShoppingBag size={25} strokeWidth={1.8} />
           </button>
           <button aria-label="Account" className="hover:text-brand-brick transition-colors hidden sm:block">
-            <User size={20} strokeWidth={1.8} />
+            <User size={25} strokeWidth={1.8} />
           </button>
 
           <button
@@ -224,10 +224,10 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
 
         <div className="flex items-center gap-5 px-6 py-6 border-t border-brand-navy/10 text-brand-navy">
           <button aria-label="Cart" className="hover:text-brand-brick transition-colors">
-            <ShoppingBag size={20} strokeWidth={1.8} />
+            <ShoppingBag size={25} strokeWidth={1.8} />
           </button>
           <button aria-label="Account" className="hover:text-brand-brick transition-colors">
-            <User size={20} strokeWidth={1.8} />
+            <User size={25} strokeWidth={1.8} />
           </button>
         </div>
       </div>

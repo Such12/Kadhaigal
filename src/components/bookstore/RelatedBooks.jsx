@@ -43,7 +43,17 @@ export default function RelatedBooks({ books }) {
             to={`/bookstore/${book.id}`}
             className="w-40 sm:w-48 shrink-0"
           >
-            <ImagePlaceholder label={book.title} className="aspect-[2/3] rounded-lg shadow-card w-full" />
+            <div className="aspect-[2/3] rounded-lg shadow-card w-full overflow-hidden bg-brand-navy/[0.03]">
+              {book.imageLinks?.thumbnail ? (
+                <img
+                  src={book.imageLinks.thumbnail}
+                  alt={book.title}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
+                />
+              ) : (
+                <ImagePlaceholder label={book.title} className="w-full h-full object-cover" />
+              )}
+            </div>
             <p className="font-display font-bold text-brand-navy text-sm mt-3 truncate">
               {book.title}
             </p>

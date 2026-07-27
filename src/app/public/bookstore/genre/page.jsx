@@ -15,7 +15,7 @@ export default function GenrePage() {
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({ price: [] })
-  const [query, setQuery] = useState('')
+  //const [query, setQuery] = useState('')
   const [sortBy, setSortBy] = useState('featured')
 
   const category = allCategories.find((c) => c.slug === slug)

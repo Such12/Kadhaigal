@@ -43,10 +43,10 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center gap-5 text-brand-navy">
           <button aria-label="Cart" className="hover:text-brand-brick transition-colors">
-            <ShoppingBag size={20} strokeWidth={1.8} />
+            <ShoppingBag size={25} strokeWidth={1.8} />
           </button>
           <button aria-label="Account" className="hover:text-brand-brick transition-colors">
-            <User size={20} strokeWidth={1.8} />
+            <User size={25} strokeWidth={1.8} />
           </button>
         </div>
 
@@ -77,8 +77,8 @@ export default function Navbar() {
             ))}
           </ul>
           <div className="flex items-center gap-6 mt-5 text-brand-navy">
-            <ShoppingBag size={20} strokeWidth={1.8} />
-            <User size={20} strokeWidth={1.8} />
+            <ShoppingBag size={25} strokeWidth={1.8} />
+            <User size={25} strokeWidth={1.8} />
           </div>
         </div>
       )}
