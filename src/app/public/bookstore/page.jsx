@@ -8,6 +8,7 @@ import JoinCommunity from '../../../components/home/JoinCommunity.jsx'
 import BookListingCard from '../../../components/bookstore/BookListingCard.jsx'
 import { getStaffPicks, getBooks } from '../../../lib/booksStore.js'
 import { categories } from '../../../data/categories.js'
+import LocalShelf from '../../../components/bookstore/LocalShelf.jsx'
 
 export default function BookstorePage() {
   const [staffPicks, setStaffPicks] = useState([])
@@ -65,6 +66,7 @@ export default function BookstorePage() {
       <CurationPhilosophy />
       <StaffPicks books={staffPicks} />
       <ShopByCategory categories={categories} />
+       <LocalShelf /> 
       <ChildrensCorner />
       <JoinCommunity />
     </>

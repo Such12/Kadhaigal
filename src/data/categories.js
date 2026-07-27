@@ -35,4 +35,16 @@ export const categories = [
     tags: ['Inspirational', 'Philosophy', 'Meditation'],
     description: 'Ideas worth sitting with — ways of thinking, living, and seeing the world differently.',
   },
+  {
+    name: 'Sci-Fi & Fantasy',
+    slug: 'sci-fi-fantasy',
+    tags: ['Space Opera', 'High Fantasy', 'Dystopian'],
+    description: 'Worlds beyond our own — distant galaxies, magic systems, and futures both feared and hoped for.',
+  },
+  {
+    name: 'Romance',
+    slug: 'romance',
+    tags: ['Contemporary', 'Historical Romance', 'Rom-Com'],
+    description: 'Love in all its forms — swoon-worthy, slow-burn, and everything in between.',
+  },
 ]

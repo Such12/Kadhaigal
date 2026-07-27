@@ -34,6 +34,7 @@ const seedFeatured = [
 //   id, price, originalPrice, badge, isStaffPick,
 //   staffNote{ by, role, quote, body },  ← admin-entered when isStaffPick
 //   rating (0–5 display stars), mood[], curatorNote{ recommendedBy, quote, body }
+//   isSelfPublished, printLocation, printNote  ← admin-entered for the Local Shelf section
 const seedBooks = [
   {
     id: 'b1',
@@ -548,6 +549,155 @@ smallThumbnail: "https://books.google.com/books/content?id=wrOQLV6xB-wC&printsec
       body: "The Grimm brothers collected these stories from oral traditions across Germany and they are beautifully strange. The original versions are much darker than the Disney adaptations — and that darkness has purpose. Fairy tales teach children about danger, consequence, and resilience. This collection is essential.",
     },
   },
+
+  // ── Self-Published & Regional ──────────────────────────────────────────
+  // These power the "Local Shelf" section on the homepage. `imageLinks`
+  // is left blank where no real cover exists yet — the component falls
+  // back to an illustrated placeholder.
+  {
+    id: 'b19',
+    title: 'Veyyil Ninaivugal',
+    authors: ['K. Saraswathi'],
+    publisher: 'Self-published',
+    publishedDate: '2023',
+    description: 'A quiet, closely observed novel about three generations of women in a Madurai household, told across one long summer.',
+    industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789395641012' }],
+    pageCount: 212,
+    categories: ['Literature & Fiction', 'Tamil Literature'],
+    averageRating: 4.6,
+    ratingsCount: 38,
+    imageLinks: { thumbnail: '', smallThumbnail: '' },
+    language: 'ta',
+    previewLink: '',
+    infoLink: '',
+    maturityRating: 'NOT_MATURE',
+    genre: 'Literature & Fiction',
+    price: 320,
+    rating: 5,
+    isSelfPublished: true,
+    printLocation: 'Madurai',
+    printNote: 'Printed in Madurai',
+  },
+  {
+    id: 'b20',
+    title: 'Nadhiyin Oram',
+    authors: ['R. Elangovan'],
+    publisher: 'Self-published',
+    publishedDate: '2022',
+    description: 'A collection of short stories set along the banks of the Kaveri, tracing the small, ordinary dramas of riverside towns.',
+    industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789395641029' }],
+    pageCount: 168,
+    categories: ['Literature & Fiction', 'Short Stories', 'Tamil Literature'],
+    averageRating: 4.4,
+    ratingsCount: 22,
+    imageLinks: { thumbnail: '', smallThumbnail: '' },
+    language: 'ta',
+    previewLink: '',
+    infoLink: '',
+    maturityRating: 'NOT_MATURE',
+    genre: 'Literature & Fiction',
+    price: 280,
+    rating: 4,
+    isSelfPublished: true,
+    printLocation: 'Chennai',
+    printNote: 'Author signs in-store',
+  },
+  {
+    id: 'b21',
+    title: 'Ooru Varalaru',
+    authors: ['M. Kavitha'],
+    publisher: 'Coimbatore Press',
+    publishedDate: '2024',
+    description: "A local historian's account of Coimbatore's textile-mill era, built from interviews with the last generation of mill workers.",
+    industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789395641036' }],
+    pageCount: 244,
+    categories: ['Non-Fiction', 'History', 'Tamil Literature'],
+    averageRating: 4.7,
+    ratingsCount: 19,
+    imageLinks: { thumbnail: '', smallThumbnail: '' },
+    language: 'ta',
+    previewLink: '',
+    infoLink: '',
+    maturityRating: 'NOT_MATURE',
+    genre: 'Non-Fiction',
+    price: 350,
+    rating: 5,
+    isSelfPublished: true,
+    printLocation: 'Coimbatore',
+    printNote: 'Coimbatore Press, 2nd run',
+  },
+  {
+    id: 'b22',
+    title: 'Kaalam Kadanda Kadhaigal',
+    authors: ['S. Murugan'],
+    publisher: 'Chennai Indie Press',
+    publishedDate: '2021',
+    description: 'Folk tales collected from villages across the Kaveri delta, retold for a modern reader without losing their original texture.',
+    industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789395641043' }],
+    pageCount: 196,
+    categories: ['Literature & Fiction', 'Folklore', 'Tamil Literature'],
+    averageRating: 4.5,
+    ratingsCount: 31,
+    imageLinks: { thumbnail: '', smallThumbnail: '' },
+    language: 'ta',
+    previewLink: '',
+    infoLink: '',
+    maturityRating: 'NOT_MATURE',
+    genre: 'Literature & Fiction',
+    price: 300,
+    rating: 4,
+    isSelfPublished: true,
+    printLocation: 'Chennai',
+    printNote: 'Chennai indie press',
+  },
+  {
+    id: 'b23',
+    title: 'The Quiet Monsoon',
+    authors: ['Arjun Mehta'],
+    publisher: 'Self-published',
+    publishedDate: '2024',
+    description: 'A debut novel about a Bengaluru architect who returns to his family home in Kodagu the monsoon after his father dies.',
+    industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789395641050' }],
+    pageCount: 256,
+    categories: ['Literature & Fiction'],
+    averageRating: 4.3,
+    ratingsCount: 27,
+    imageLinks: { thumbnail: '', smallThumbnail: '' },
+    language: 'en',
+    previewLink: '',
+    infoLink: '',
+    maturityRating: 'NOT_MATURE',
+    genre: 'Literature & Fiction',
+    price: 399,
+    rating: 4,
+    isSelfPublished: true,
+    printLocation: 'Bengaluru',
+    printNote: 'Self-published, 2024',
+  },
+  {
+    id: 'b24',
+    title: 'Letters from the Ghats',
+    authors: ['Priya Nair'],
+    publisher: 'Self-published',
+    publishedDate: '2023',
+    description: "An epistolary memoir written as letters to the author's grandmother, tracing a return to Kerala after a decade abroad.",
+    industryIdentifiers: [{ type: 'ISBN_13', identifier: '9789395641067' }],
+    pageCount: 180,
+    categories: ['Non-Fiction', 'Memoir'],
+    averageRating: 4.8,
+    ratingsCount: 15,
+    imageLinks: { thumbnail: '', smallThumbnail: '' },
+    language: 'en',
+    previewLink: '',
+    infoLink: '',
+    maturityRating: 'NOT_MATURE',
+    genre: 'Non-Fiction',
+    price: 349,
+    rating: 5,
+    isSelfPublished: true,
+    printLocation: 'Kochi',
+    printNote: 'Only 40 copies left',
+  },
 ]
 
 
@@ -595,6 +745,18 @@ export async function removeFeaturedBook(id) {
 
 // ---- Full inventory (bookstore listing + detail pages) ----
 
+// Reconciles whatever is in localStorage with the current seedBooks array,
+// so new seed entries (like a fresh batch of Local Shelf titles) show up
+// for returning visitors, not just on a first-ever page load. Admin edits
+// and deletes to existing ids are preserved; only missing ids get appended.
+function syncSeedBooks() {
+  const stored = read(BOOKS_KEY, seedBooks)
+  const storedIds = new Set(stored.map((b) => b.id))
+  const missing = seedBooks.filter((b) => !storedIds.has(b.id))
+  if (missing.length === 0) return stored
+  return write(BOOKS_KEY, [...stored, ...missing])
+}
+
 function mergeSeedData(books) {
   return books.map((b) => {
     const seed = seedBooks.find((s) => s.id === b.id)
@@ -614,30 +776,36 @@ function mergeSeedData(books) {
 }
 
 export async function getBooks() {
-  const books = read(BOOKS_KEY, seedBooks)
+  const books = syncSeedBooks()
   return mergeSeedData(books)
 }
 
 export async function getBookById(id) {
-  const books = mergeSeedData(read(BOOKS_KEY, seedBooks))
+  const books = mergeSeedData(syncSeedBooks())
   return books.find((b) => String(b.id) === String(id)) ?? null
 }
 
 export async function getBooksByGenre(genre) {
-  const books = mergeSeedData(read(BOOKS_KEY, seedBooks))
+  const books = mergeSeedData(syncSeedBooks())
   return books.filter((b) => (b.genre ?? '').toLowerCase() === genre.toLowerCase())
 }
 
 export async function getBooksBySubGenre(subGenre) {
-  const books = mergeSeedData(read(BOOKS_KEY, seedBooks))
+  const books = mergeSeedData(syncSeedBooks())
   return books.filter((b) => (b.subGenre ?? '').toLowerCase() === subGenre.toLowerCase())
 }
 
 export async function getStaffPicks(genre) {
-  const books = mergeSeedData(read(BOOKS_KEY, seedBooks))
+  const books = mergeSeedData(syncSeedBooks())
   const picks = books.filter((b) => b.isStaffPick)
   if (!genre) return picks
   return picks.filter((b) => (b.genre ?? '').toLowerCase() === genre.toLowerCase())
+}
+
+// Powers the "Local Shelf" section — self-published and regional-press titles.
+export async function getLocalShelfBooks() {
+  const books = mergeSeedData(syncSeedBooks())
+  return books.filter((b) => b.isSelfPublished)
 }
 
 export async function addBook(book) {
