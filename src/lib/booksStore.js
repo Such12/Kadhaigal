@@ -35,6 +35,7 @@ const seedFeatured = [
 //   staffNote{ by, role, quote, body },  ← admin-entered when isStaffPick
 //   rating (0–5 display stars), mood[], curatorNote{ recommendedBy, quote, body }
 //   isSelfPublished, printLocation, printNote  ← admin-entered for the Local Shelf section
+//   isUsed, conditionNote  ← admin-entered when a copy is a used/pre-loved sale
 const seedBooks = [
   {
     id: 'b1',
@@ -236,6 +237,8 @@ smallThumbnail: "https://books.google.com/books/content?id=dI0-9L2R2N4C&printsec
       body: "I've read countless fantasy epics, but Mistborn's magic system is genuinely the most creative thing I've encountered.",
     },
     rating: 5,
+    isUsed: true,
+    conditionNote: 'Good condition, light shelf wear on the cover',
   },
   {
     id: 'b7',
@@ -548,6 +551,8 @@ smallThumbnail: "https://books.google.com/books/content?id=wrOQLV6xB-wC&printsec
       quote: '"The original dark fairy tales — not the sanitised ones."',
       body: "The Grimm brothers collected these stories from oral traditions across Germany and they are beautifully strange. The original versions are much darker than the Disney adaptations — and that darkness has purpose. Fairy tales teach children about danger, consequence, and resilience. This collection is essential.",
     },
+    isUsed: true,
+    conditionNote: 'Well-loved copy, some page yellowing, binding intact',
   },
 
   // ── Self-Published & Regional ──────────────────────────────────────────
@@ -783,6 +788,17 @@ export async function getBooks() {
 export async function getBookById(id) {
   const books = mergeSeedData(syncSeedBooks())
   return books.find((b) => String(b.id) === String(id)) ?? null
+}
+
+// Used by the admin "Add Book" form to warn before creating a duplicate entry.
+export async function getBookByIsbn(isbn) {
+  const clean = String(isbn).replace(/[-\s]/g, '')
+  const books = mergeSeedData(syncSeedBooks())
+  return (
+    books.find((b) =>
+      (b.industryIdentifiers ?? []).some((id) => id.identifier?.replace(/[-\s]/g, '') === clean)
+    ) ?? null
+  )
 }
 
 export async function getBooksByGenre(genre) {
