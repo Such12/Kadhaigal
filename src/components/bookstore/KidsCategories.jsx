@@ -1,48 +1,94 @@
 import { Link } from 'react-router-dom'
-import { ArrowUpRight } from 'lucide-react'
-import faceBaby from '../../assets/images/face_icon_baby.png'
-import faceToddler from '../../assets/images/face_icon_toddler.png'
-import faceGirl from '../../assets/images/face_icon_girl.png'
-import faceBoy from '../../assets/images/face_icon_boy.png'
-import faceTeen from '../../assets/images/face_icon_teen.png'
+import { ArrowRight } from 'lucide-react'
+
+import caterpillar from '../../assets/images/caterpillar.png'
+import monster from '../../assets/images/monster.png'
+import matilda from '../../assets/images/matilda.png'
+import wizard from '../../assets/images/wizard.png'
+import rebel from '../../assets/images/rebel.png'
 
 const ageCategories = [
-  { name: '0-2 Years', slug: '0-2-years', icon: faceBaby },
-  { name: '3-5 Years', slug: '3-5-years', icon: faceToddler },
-  { name: '6-8 Years', slug: '6-8-years', icon: faceGirl },
-  { name: '9-12 Years', slug: '9-12-years', icon: faceBoy },
-  { name: 'Young Adult', slug: 'young-adult', icon: faceTeen },
-  { name: 'View All', slug: 'all', icon: null },
+  {
+    name: 'Ages 0 - 2',
+    slug: '0-2-years',
+    desc: 'Board books & very first stories',
+    icon: caterpillar,
+    color: 'bg-brand-sage',
+    textColor: 'text-[#3f6b2a]',
+  },
+  {
+    name: 'Ages 3 - 5',
+    slug: '3-5-years',
+    desc: 'Picture books & read-alouds',
+    icon: monster,
+    color: 'bg-brand-brick',
+    textColor: 'text-[#9c3b2e]',
+  },
+  {
+    name: 'Ages 6 - 8',
+    slug: '6-8-years',
+    desc: 'Early readers & chapter books',
+    icon: matilda,
+    color: 'bg-[#F7BC05]',
+    textColor: 'text-[#a37900]',
+  },
+  {
+    name: 'Ages 9 - 12',
+    slug: '9-12-years',
+    desc: 'Middle grade adventures',
+    icon: wizard,
+    color: 'bg-brand-navy',
+    textColor: 'text-[#103447]',
+  },
+  {
+    name: 'Young Adult',
+    slug: 'young-adult',
+    desc: 'Teen fiction & coming of age',
+    icon: rebel,
+    color: 'bg-brand-sage',
+    textColor: 'text-[#3f6b2a]',
+  },
 ]
 
 export default function KidsCategories() {
   return (
-    <section className="py-20 sm:py-24 bg-brand-cream">
-      <div className="container-page max-w-5xl mx-auto flex flex-col items-center">
-        <h2 className="font-display font-bold text-4xl sm:text-5xl text-brand-navy text-center mb-3">
-          Books by Age, Stories for All
-        </h2>
-        <p className="text-brand-navy/80 text-center mb-16 text-sm sm:text-base max-w-lg">
-          Thoughtfully curated reads for every growing age.
-        </p>
+    <section className="py-20 sm:py-24 relative border-t border-brand-navy/10">
+      <div className="container-page max-w-6xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div>
+            <h2 className="font-display font-bold text-4xl sm:text-5xl text-brand-navy mb-4">
+              Find the perfect book
+            </h2>
+            <p className="text-brand-navy/80 text-lg max-w-xl">
+              From their very first board book to complex teenage sagas, we have stories curated for every stage of growing up.
+            </p>
+          </div>
+        </div>
 
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-10">
-          {ageCategories.map((cat) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {ageCategories.map((cat, idx) => (
             <Link
               key={cat.slug}
-              to={cat.slug === 'all' ? '/bookstore/kids#all' : `/bookstore/genre/${cat.slug}`}
-              className="group flex flex-col items-center gap-4 w-20 sm:w-24 md:w-28"
+              to={`/bookstore/genre/${cat.slug}`}
+              className="group flex flex-col items-center text-center p-8 rounded-[2rem] bg-white border-2 border-brand-navy/5 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-[2px] border-brand-navy bg-[#FAFAD2] flex items-center justify-center shadow-[0_12px_24px_-8px_rgba(20,41,80,0.3)] group-hover:-translate-y-2 transition-transform duration-300 overflow-hidden">
-                {cat.icon ? (
-                  <img src={cat.icon} alt={cat.name} className="w-[80%] h-[80%] object-contain mix-blend-multiply" />
-                ) : (
-                  <ArrowUpRight size={36} strokeWidth={2} className="text-brand-navy" />
-                )}
+              <div className="relative flex justify-center items-end mb-6 pt-6 h-32">
+                {/* Background Circle */}
+                <div className={`w-24 h-24 rounded-full ${cat.color}/30 absolute bottom-0 transition-transform duration-500 group-hover:scale-110`} />
+                
+                {/* Character Image */}
+                <img 
+                  src={cat.icon} 
+                  alt={cat.name} 
+                  className="w-28 h-28 object-contain mix-blend-multiply relative z-10 transition-transform duration-500 group-hover:-translate-y-3" 
+                />
               </div>
-              <span className="font-body text-xs sm:text-sm font-semibold text-brand-navy/80 text-center">
+              <h3 className="font-display text-2xl text-brand-navy mb-2">
                 {cat.name}
-              </span>
+              </h3>
+              <p className="text-brand-navy/60 text-sm">
+                {cat.desc}
+              </p>
             </Link>
           ))}
         </div>

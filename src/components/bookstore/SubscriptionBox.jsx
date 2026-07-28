@@ -1,73 +1,85 @@
 import { Link } from 'react-router-dom'
-import { Check } from 'lucide-react'
-import ImagePlaceholder from '../ui/ImagePlaceholder.jsx'
+import { Sparkles, BookOpen, Users } from 'lucide-react'
 import Button from '../ui/Button.jsx'
+import boxImg from '../../assets/images/subscription_box_kid_nobg.png'
 
-const highlights = [
-  'Carefully chosen books with a focus on feelings, curiosity, and understanding of the world',
-  'Questions parents can discuss with children',
-  'Monthly storytelling sessions at Kadhaigal',
+const features = [
+  {
+    icon: BookOpen,
+    title: 'Curated Stories',
+    desc: 'Handpicked books focusing on feelings, curiosity, and world understanding.',
+    color: 'bg-[#ff7a59]'
+  },
+  {
+    icon: Users,
+    title: 'Parent Community',
+    desc: 'Join discussions with simple ideas, reflection prompts, and gentle nudges.',
+    color: 'bg-[#7aa066]'
+  },
+  {
+    icon: Sparkles,
+    title: 'Storytelling Magic',
+    desc: 'Exclusive monthly storytelling sessions right here at Kadhaigal.',
+    color: 'bg-[#F7BC05]'
+  }
 ]
 
 export default function SubscriptionBox() {
   return (
-    <section className="bg-[#F5F5DC]">
-      <div className="container-page py-16 sm:py-20 grid md:grid-cols-2 gap-12 items-center">
-        <ImagePlaceholder
-          label="Chintu & Pintoo on a stack of books illustration"
-          className="aspect-[4/5] rounded-2xl shadow-polaroid w-full max-w-sm mx-auto"
-        />
-
-        <div>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy leading-tight">
-            Introducing the Chintu Pintoo Subscription Box
-          </h2>
-
-          <div className="mt-5 space-y-4 text-brand-navy/70 leading-relaxed max-w-md">
-            <p>
-              This is more than a book subscription — it's a reading
-              community for families.
-            </p>
-            <p>
-              Each month, you'll receive thoughtfully selected books for
-              your child, plus join a parent community that shares simple
-              ideas, reflection prompts, and gentle nudges to help children
-              read regularly.
-            </p>
-            <p>
-              We believe reading grows best with consistency and
-              encouragement — not pressure or perfection.
-            </p>
-          </div>
-
-          <p className="font-display font-bold text-brand-navy mt-6 mb-3">
-            What makes our subscription special:
+    <section className="py-6 sm:py-8 relative bg-brand-cream overflow-hidden">
+      
+      <div className="container-page">
+        
+        {/* Centered Header */}
+        <div className="text-center max-w-2xl mx-auto mb-4 relative z-10">
+          <p className="text-xs font-bold tracking-widest uppercase text-[#ff7a59] mb-2">
+            A Reading Community For Families
           </p>
-          <ul className="space-y-3">
-            {highlights.map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                <span className="w-5 h-5 rounded-full bg-brand-sage/25 flex items-center justify-center shrink-0 mt-0.5">
-                  <Check size={12} className="text-[#3f6b2a]" strokeWidth={3} />
-                </span>
-                <span className="text-sm text-brand-navy/75">{item}</span>
-              </li>
-            ))}
-          </ul>
+          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy leading-tight mb-3">
+            The Chintu Pintoo <br /> Subscription Box
+          </h2>
+          <p className="text-brand-navy/70 text-base">
+            We believe reading grows best with consistency and encouragement. 
+            Receive thoughtfully selected books each month and let the magic begin!
+          </p>
+        </div>
 
-          <div className="bg-brand-brick text-white rounded-xl px-6 py-4 mt-6 max-w-xs text-center">
-            <p className="font-display font-bold">Age: 3 to 8 years</p>
-            <p className="font-display font-bold">Price: ₹750 per month</p>
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          
+          {/* Left: Feature Grid */}
+          <div className="space-y-4 lg:pr-8 lg:pl-12 relative z-10">
+            <h3 className="font-display text-xl text-brand-navy mb-3">What's inside the box?</h3>
+            
+            <div className="grid gap-3">
+              {features.map((item, idx) => (
+                <div key={idx} className="flex gap-4 items-start p-3 rounded-2xl hover:bg-white/40 transition-colors border border-transparent hover:border-brand-navy/5">
+                  <div className={`w-12 h-12 shrink-0 rounded-xl flex items-center justify-center text-white shadow-md ${item.color}`}>
+                    <item.icon size={20} strokeWidth={2.5} />
+                  </div>
+                  <div className="pt-0.5">
+                    <h4 className="font-display text-lg text-brand-navy mb-1">{item.title}</h4>
+                    <p className="text-brand-navy/70 text-sm leading-snug">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-4">
+              <Button as={Link} to="/contact" variant="primary" className="w-full sm:w-auto !px-10 !py-3 text-base shadow-xl shadow-[#ff7a59]/20 hover:shadow-[#ff7a59]/40 hover:-translate-y-1 transition-all !bg-[#ff7a59] hover:!bg-[#e66a4a] !border-none">
+                Start Their Journey
+              </Button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-4 mt-6">
-            <Button as={Link} to="/contact" variant="primary">
-              Register Now
-            </Button>
-            <ImagePlaceholder
-              label="Registration QR code"
-              className="w-16 h-16 rounded-lg shrink-0"
-            />
+          {/* Right: Interactive/Visual representation of the box */}
+          <div className="relative flex justify-center group animate-[float_6s_ease-in-out_infinite] mix-blend-multiply mt-4 lg:mt-0">
+              <img 
+                src={boxImg} 
+                alt="Child opening a magical box of books" 
+                className="w-[95%] sm:w-full max-w-[650px] max-h-[350px] lg:max-h-[450px] object-contain scale-110 lg:scale-125 origin-center transform-gpu -ml-8"
+              />
           </div>
+          
         </div>
       </div>
     </section>

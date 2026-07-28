@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import KidsBooksHero from '../../../../components/bookstore/KidsBooksHero.jsx'
 import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
-import StaffPicks from '../../../../components/bookstore/StaffPicks.jsx'
+import StaffPicks from '../../../../components/bookstore/StaffPicks.jsx' // Reverted to original
 import KidsCategories from '../../../../components/bookstore/KidsCategories.jsx'
 import SubscriptionBox from '../../../../components/bookstore/SubscriptionBox.jsx'
-import JoinCommunity from '../../../../components/home/JoinCommunity.jsx'
+import KidsJoinCommunity from '../../../../components/bookstore/KidsJoinCommunity.jsx'
 import { getStaffPicks } from '../../../../lib/booksStore.js'
-import { kidsCategories } from '../../../../data/kidsCategories.js'
 
 export default function KidsBookstorePage() {
   const [staffPicks, setStaffPicks] = useState([])
@@ -16,15 +15,29 @@ export default function KidsBookstorePage() {
   }, [])
 
   return (
-    <>
+    <div className="kids-page min-h-screen relative overflow-x-hidden bg-brand-cream">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+        
+        .kids-page .font-display {
+          font-family: 'Lilita One', cursive !important;
+          letter-spacing: 0.03em;
+          font-weight: 400 !important;
+        }
+      `}</style>
+
       <BookstoreNavbar />
+      
       <KidsBooksHero />
-      <section id="kids-staff-picks">
+      
+      <div className="relative z-10 -mt-10">
         <StaffPicks books={staffPicks} />
-      </section>
+      </div>
+
       <KidsCategories />
       <SubscriptionBox />
-      <JoinCommunity />
-    </>
+      <KidsJoinCommunity />
+      
+    </div>
   )
 }
