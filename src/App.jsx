@@ -15,6 +15,7 @@ import BookDetailPage from './app/public/bookstore/id/page.jsx'
 import ContactPage from './app/public/contact/page.jsx'
 
 // admin pages
+import AdminLoginPage from './app/admin/login/page.jsx'
 import AdminDashboardPage from './app/admin/page.jsx'
 import AdminBooksPage from './app/admin/books/page.jsx'
 import AdminEventsPage from './app/admin/events/page.jsx'
@@ -39,6 +40,7 @@ export default function App() {
         </Route>
 
         {/* admin */}
+        <Route path="admin/login" element={<AdminLoginPage />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="books" element={<AdminBooksPage />} />

@@ -42,6 +42,7 @@ function emptyForm() {
     genre: '',
     subGenre: '',
     price: '',
+    quantity: '',
     originalPrice: '',
     badge: '',
     rating: '',
@@ -85,6 +86,7 @@ function bookToForm(book) {
     genre: book.genre ?? '',
     subGenre: book.subGenre ?? '',
     price: book.price ?? '',
+    quantity: book.quantity ?? '', 
     originalPrice: book.originalPrice ?? '',
     badge: book.badge ?? '',
     rating: book.rating ?? '',
@@ -134,6 +136,7 @@ function formToBook(form) {
     genre: form.genre.trim(),
     subGenre: form.subGenre.trim() || undefined,
     price: form.price ? Number(form.price) : 0,
+    quantity: form.quantity ? Number(form.quantity) : 0,
     originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
     badge: form.badge.trim() || undefined,
     rating: form.rating ? Number(form.rating) : undefined,
@@ -382,6 +385,15 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                 </Field>
                 <Field label="Price (₹)" required>
                   <input type="number" value={form.price} onChange={(e) => set('price', e.target.value)} className={inputClass} />
+                </Field>
+                 <Field label="Quantity in Stock" required>
+                  <input
+                    type="number"
+                    min="0"
+                    value={form.quantity}
+                    onChange={(e) => set('quantity', e.target.value)}
+                    className={inputClass}
+                  />
                 </Field>
                 <Field label="Original Price (₹)" hint="Optional, shows a strikethrough">
                   <input
