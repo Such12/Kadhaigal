@@ -2,15 +2,9 @@ import { useState } from 'react'
 import { X, Search, Loader2, AlertCircle, RefreshCw } from 'lucide-react'
 import { fetchBookByIsbn, BookNotFoundError, RateLimitError } from '../../../lib/googleBooksApi.js'
 import { getBookByIsbn } from '../../../lib/booksStore.js'
+import { categories } from '../../../data/categories.js'
 
-const GENRES = [
-  'Literature & Fiction',
-  'Non-Fiction',
-  "Children's Books",
-  'Sci-Fi & Fantasy',
-  'Young Adult',
-  'History',
-]
+const GENRES = categories.map(c => c.name)
 
 function splitList(str) {
   return str
@@ -156,7 +150,7 @@ function formToBook(form) {
   }
 }
 
-export default function BookFormModal({ mode, initialBook, saving, onClose, onSave }) {
+export default function BookFormModal({ mode, initialBook, saving, onClose, onSave, onValidationError }) {
   const isEdit = mode === 'edit'
   const [entryMode, setEntryMode] = useState('isbn') // 'isbn' | 'manual' — add mode only
   const [form, setForm] = useState(() => bookToForm(initialBook))
@@ -223,11 +217,19 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
     e.preventDefault()
     setSubmitError('')
     if (!form.title.trim()) {
-      setSubmitError('Title is required.')
+      if (onValidationError) onValidationError('Title is required.')
       return
     }
     if (!form.genre.trim()) {
-      setSubmitError('Please choose a genre.')
+      if (onValidationError) onValidationError('Please choose a genre.')
+      return
+    }
+    if (!form.price && form.price !== 0) {
+      if (onValidationError) onValidationError('Price is required.')
+      return
+    }
+    if (!form.quantity && form.quantity !== 0) {
+      if (onValidationError) onValidationError('Quantity is required.')
       return
     }
     try {
@@ -373,7 +375,14 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
 
               <Section title="Store Details">
                 <Field label="Genre" required>
-                  <select value={form.genre} onChange={(e) => set('genre', e.target.value)} className={inputClass}>
+                  <select
+                    value={form.genre}
+                    onChange={(e) => {
+                      set('genre', e.target.value)
+                      set('subGenre', '')
+                    }}
+                    className={inputClass}
+                  >
                     <option value="">Select a genre…</option>
                     {GENRES.map((g) => (
                       <option key={g} value={g}>{g}</option>
@@ -381,7 +390,17 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                   </select>
                 </Field>
                 <Field label="Sub-genre">
-                  <input value={form.subGenre} onChange={(e) => set('subGenre', e.target.value)} className={inputClass} />
+                  <select
+                    value={form.subGenre}
+                    onChange={(e) => set('subGenre', e.target.value)}
+                    className={inputClass}
+                    disabled={!form.genre}
+                  >
+                    <option value="">Select a sub-genre…</option>
+                    {categories.find(c => c.name === form.genre)?.tags.map(tag => (
+                      <option key={tag} value={tag}>{tag}</option>
+                    ))}
+                  </select>
                 </Field>
                 <Field label="Price (₹)" required>
                   <input type="number" value={form.price} onChange={(e) => set('price', e.target.value)} className={inputClass} />

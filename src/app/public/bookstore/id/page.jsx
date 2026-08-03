@@ -57,10 +57,18 @@ export default function BookDetailPage() {
       <div className="container-page py-16">
       {/* Top: cover + primary info */}
       <div className="grid md:grid-cols-[340px_1fr] gap-10 items-start">
-        <ImagePlaceholder
-          label={book.title}
-          className="aspect-[2/3] rounded-2xl shadow-polaroid w-full max-w-xs"
-        />
+        {book.imageLinks?.thumbnail ? (
+          <img
+            src={book.imageLinks.thumbnail}
+            alt={book.title}
+            className="aspect-[2/3] object-cover rounded-2xl shadow-polaroid w-full max-w-xs"
+          />
+        ) : (
+          <ImagePlaceholder
+            label={book.title}
+            className="aspect-[2/3] rounded-2xl shadow-polaroid w-full max-w-xs"
+          />
+        )}
 
         <div>
           {book.badge && (

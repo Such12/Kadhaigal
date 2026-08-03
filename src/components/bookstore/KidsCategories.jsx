@@ -52,7 +52,7 @@ const ageCategories = [
 
 export default function KidsCategories() {
   return (
-    <section className="py-20 sm:py-24 relative border-t border-brand-navy/10">
+    <section className="py-20 sm:py-24 relative">
       <div className="container-page max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
@@ -72,15 +72,12 @@ export default function KidsCategories() {
               to={`/bookstore/genre/${cat.slug}`}
               className="group flex flex-col items-center text-center p-8 rounded-[2rem] bg-white border-2 border-brand-navy/5 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
             >
-              <div className="relative flex justify-center items-end mb-6 pt-6 h-32">
-                {/* Background Circle */}
-                <div className={`w-24 h-24 rounded-full ${cat.color}/30 absolute bottom-0 transition-transform duration-500 group-hover:scale-110`} />
-                
+              <div className="relative flex justify-center items-end mb-6 pt-6 h-40">
                 {/* Character Image */}
                 <img 
                   src={cat.icon} 
                   alt={cat.name} 
-                  className="w-28 h-28 object-contain mix-blend-multiply relative z-10 transition-transform duration-500 group-hover:-translate-y-3" 
+                  className="w-36 h-36 object-contain mix-blend-multiply relative z-10 transition-transform duration-500 group-hover:-translate-y-3" 
                 />
               </div>
               <h3 className="font-display text-2xl text-brand-navy mb-2">

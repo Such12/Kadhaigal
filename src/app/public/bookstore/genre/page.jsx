@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import BookListingCard from '../../../../components/bookstore/BookListingCard.jsx'
 import BookFilters from '../../../../components/bookstore/BookFilters.jsx'
@@ -12,6 +12,7 @@ const allCategories = [...categories, ...kidsCategories]
 
 export default function GenrePage() {
   const { genre: slug } = useParams()
+  const location = useLocation()
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({ price: [] })
@@ -33,6 +34,19 @@ export default function GenrePage() {
     })
   }, [genreName, category])
 
+  // Sync subcategory from URL if present
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const sub = params.get('sub')
+    if (sub) {
+      setFilters(prev => {
+        // If it's already selected, do nothing
+        if (prev.subcategories && prev.subcategories.includes(sub)) return prev
+        return { ...prev, subcategories: [sub] }
+      })
+    }
+  }, [location.search])
+
   return (
     <>
       <BookstoreNavbar />
@@ -48,7 +62,7 @@ export default function GenrePage() {
 
       <div className="mt-12 grid grid-cols-1 lg:grid-cols-[minmax(220px,260px)_1fr] gap-8">
         <aside className="hidden lg:block">
-          <BookFilters filters={filters} onChange={setFilters} />
+          <BookFilters filters={filters} onChange={setFilters} subcategories={category?.tags || []} />
         </aside>
 
         <main>
@@ -110,6 +124,12 @@ export default function GenrePage() {
                       return true
                     })
                     if (!ok) return false
+                  }
+                  // subcategory filter
+                  if (filters.subcategories && filters.subcategories.length > 0) {
+                    if (!b.subGenre || !filters.subcategories.includes(b.subGenre)) {
+                      return false
+                    }
                   }
                   return true
                 })

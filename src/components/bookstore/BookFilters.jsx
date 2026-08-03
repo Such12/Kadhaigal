@@ -1,8 +1,8 @@
 // Interactive filters for the bookstore listing. Controlled via props so the
 // containing page (genre page) can apply the filter state to the displayed books.
 
-export default function BookFilters({ filters = {}, onChange = () => {} }) {
-  const { price = [] } = filters
+export default function BookFilters({ filters = {}, onChange = () => {}, subcategories = [] }) {
+  const { price = [], subcategories: selectedSubs = [] } = filters
 
   function togglePrice(range) {
     const next = { ...filters }
@@ -13,9 +13,37 @@ export default function BookFilters({ filters = {}, onChange = () => {} }) {
     onChange(next)
   }
 
+  function toggleSub(sub) {
+    const next = { ...filters }
+    const set = new Set(next.subcategories || [])
+    if (set.has(sub)) set.delete(sub)
+    else set.add(sub)
+    next.subcategories = Array.from(set)
+    onChange(next)
+  }
+
   return (
     <aside className="bg-white rounded-xl shadow-card p-4">
       <h3 className="font-display font-semibold text-lg text-brand-navy mb-3">Filter</h3>
+
+      {subcategories.length > 0 && (
+        <div className="mb-4">
+          <p className="text-sm font-medium text-brand-navy/80 mb-2">Subcategories</p>
+          <div className="flex flex-col gap-2 text-sm text-brand-navy/80">
+            {subcategories.map(sub => (
+              <label key={sub} className="inline-flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedSubs.includes(sub)}
+                  onChange={() => toggleSub(sub)}
+                  className="w-4 h-4 rounded border-brand-navy/30 text-brand-brick focus:ring-brand-brick/30"
+                />
+                <span>{sub}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mb-4">
         <p className="text-sm font-medium text-brand-navy/80 mb-2">Price</p>

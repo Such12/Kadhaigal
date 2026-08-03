@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Plus, Pencil, Trash2, Search, BookOpen } from 'lucide-react'
 import { getBooks, addBook, updateBook, deleteBook } from '../../../lib/booksStore.js'
 import BookFormModal from './BookFormModel.jsx'
+import { useToast, ToastContainer } from '../../../components/ui/Toast.jsx'
 
 export default function AdminBooksPage() {
   const [books, setBooks] = useState([])
@@ -11,6 +12,7 @@ export default function AdminBooksPage() {
   const [modal, setModal] = useState(null) // { mode: 'add' | 'edit', book?: object }
   const [deletingId, setDeletingId] = useState(null)
   const [saving, setSaving] = useState(false)
+  const { toasts, push: pushToast, dismiss } = useToast()
 
   async function refresh() {
     setLoading(true)
@@ -45,8 +47,10 @@ export default function AdminBooksPage() {
     try {
       if (modal.mode === 'edit') {
         await updateBook(modal.book.id, bookData)
+        pushToast(`"${bookData.title}" updated successfully.`)
       } else {
         await addBook(bookData)
+        pushToast(`"${bookData.title}" added to the catalogue.`)
       }
       setModal(null)
       await refresh()
@@ -56,9 +60,11 @@ export default function AdminBooksPage() {
   }
 
   async function confirmDelete() {
+    const book = books.find((b) => b.id === deletingId)
     await deleteBook(deletingId)
     setDeletingId(null)
     await refresh()
+    pushToast(book ? `"${book.title}" removed from the catalogue.` : 'Book removed.', 'error')
   }
 
   return (
@@ -192,12 +198,15 @@ export default function AdminBooksPage() {
           saving={saving}
           onClose={() => setModal(null)}
           onSave={handleSave}
+          onValidationError={(msg) => pushToast(msg, 'error')}
         />
       )}
 
       {deletingId && (
         <ConfirmDeleteDialog onCancel={() => setDeletingId(null)} onConfirm={confirmDelete} />
       )}
+
+      <ToastContainer toasts={toasts} dismiss={dismiss} />
     </div>
   )
 }
