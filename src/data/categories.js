@@ -47,4 +47,10 @@ export const categories = [
     tags: ['Art', 'Design', 'Food', 'Adult Colouring'],
     description: 'Creative expression, aesthetics, and the art of living beautifully.',
   },
+  {
+    name: "Children's Books",
+    slug: 'childrens-books',
+    tags: ['Ages 0 - 2', 'Ages 3 - 5', 'Ages 6 - 8', 'Ages 9 - 12', 'Young Adult'],
+    description: 'Stories that spark imagination and grow with young readers.',
+  },
 ]
