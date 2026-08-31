@@ -26,7 +26,7 @@ export const genreCategories = [
     bgColor: '#D9E2EC', // Pastel Navy / Ice Blue (Derived from #142950)
   },
   {
-    slug: 'mystery-thriller',
+    slug: 'mysteries-and-thrillers',
     genre: 'Mysteries and Thrillers',
     label: 'Mysteries and Thrillers',
     tagline: 'Stay up past the last chapter',

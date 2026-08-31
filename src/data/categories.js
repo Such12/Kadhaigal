@@ -19,9 +19,9 @@ export const allCategories = [
     description: 'Worlds beyond our own — distant galaxies, and futures both feared and hoped for.',
   },
   {
-    name: 'Mystries and Thrillers',
-    slug: 'mystries-and-thrillers',
-    tags: ['Pyschological thrillers', 'Cozy mystries', 'Crime and Detective Fiction', 'Spy Thrillers'],
+    name: 'Mysteries and Thrillers',
+    slug: 'mysteries-and-thrillers',
+    tags: ['Pyschological thrillers', 'Cozy mysteries', 'Crime and Detective Fiction', 'Spy Thrillers'],
     description: 'Twists you won\'t see coming, and puzzles worth staying up for.',
   },
   {
