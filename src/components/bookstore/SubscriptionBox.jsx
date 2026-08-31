@@ -32,7 +32,7 @@ export default function SubscriptionBox() {
         
         {/* Centered Header */}
         <div className="text-center max-w-2xl mx-auto mb-4 relative z-10">
-          <p className="text-xs font-bold tracking-widest uppercase text-[#ff7a59] mb-2">
+          <p className="text-xs font-bold tracking-widest uppercase text-brand-brick mb-2">
             A Reading Community For Families
           </p>
           <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy leading-tight mb-3">
@@ -65,7 +65,7 @@ export default function SubscriptionBox() {
             </div>
 
             <div className="pt-4">
-              <Button as={Link} to="/contact" variant="primary" className="w-full sm:w-auto !px-10 !py-3 text-base shadow-xl shadow-[#ff7a59]/20 hover:shadow-[#ff7a59]/40 hover:-translate-y-1 transition-all !bg-[#ff7a59] hover:!bg-[#e66a4a] !border-none">
+              <Button as={Link} to="/contact" variant="primary" className="w-full sm:w-auto !px-10 !py-3 text-base shadow-xl shadow-brand-brick/20 hover:shadow-brand-brick/40 hover:-translate-y-1 transition-all !bg-brand-brick hover:!bg-brand-brick/90 !border-none">
                 Start Their Journey
               </Button>
             </div>

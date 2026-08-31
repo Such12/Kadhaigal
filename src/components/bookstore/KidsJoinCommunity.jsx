@@ -8,12 +8,12 @@ export default function KidsJoinCommunity() {
 
         {/* Header section */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <p className="text-sm font-bold tracking-widest uppercase text-[#ff7a59] mb-4 inline-flex items-center gap-2">
+          <p className="text-sm font-bold tracking-widest uppercase text-brand-brick mb-4 inline-flex items-center gap-2">
             <Instagram size={16} />
             Follow Along on Instagram
           </p>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl text-brand-navy leading-tight mb-4">
-            Discover Books <span className="text-[#ff7a59]">We Love.</span>
+            Discover Books <span className="text-brand-brick">We Love.</span>
           </h2>
           <p className="text-brand-navy/70 text-lg max-w-xl mx-auto leading-relaxed">
             Every week, we spotlight a children's book on Instagram — sharing what makes it special and why your child will love it.
@@ -64,7 +64,7 @@ export default function KidsJoinCommunity() {
             </div>
 
             {/* Floating badge */}
-            <div className="absolute -top-4 -right-2 bg-[#ff7a59] text-white font-display font-bold text-xs px-4 py-2 rounded-full shadow-lg shadow-[#ff7a59]/30 rotate-12">
+            <div className="absolute -top-4 -right-2 bg-brand-brick text-white font-display font-bold text-xs px-4 py-2 rounded-full shadow-lg shadow-[#ff7a59]/30 rotate-12">
               Weekly Pick ✨
             </div>
           </div>
