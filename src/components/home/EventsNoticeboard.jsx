@@ -28,6 +28,49 @@ const accentStyles = {
 
 const tilts = ["-rotate-2", "rotate-1", "-rotate-1", "rotate-2", "-rotate-2", "rotate-1", "rotate-2"];
 
+function parseFlexibleDate(value) {
+  if (!value) return null;
+  // try direct Date parse
+  const d = new Date(value);
+  if (!Number.isNaN(d.getTime())) return d;
+  // try replacing common separators and parse again
+  try {
+    const alt = value.replace(/\s+–\s+|\s+—\s+|\s+-\s+/g, ' ').split(' ')[0];
+    const d2 = new Date(alt);
+    if (!Number.isNaN(d2.getTime())) return d2;
+  } catch (e) {
+    // fall through
+  }
+  return null;
+}
+
+function isEventPast(event, now = new Date()) {
+  // Prefer explicit end timestamps
+  const endKeys = ['endDate','end','endsAt','end_date','end_time','endTime','endDatetime','end_datetime','endAt','end_at'];
+  for (const k of endKeys) {
+    if (event[k]) {
+      const d = parseFlexibleDate(event[k]);
+      if (d) return d < now;
+    }
+  }
+
+  // If only a date (or start) is provided, consider the event over at day's end
+  const startKeys = ['date','datetime','start','startsAt','startDate','start_time','day'];
+  for (const k of startKeys) {
+    if (event[k]) {
+      const d = parseFlexibleDate(event[k]);
+      if (d) {
+        const dayEnd = new Date(d);
+        dayEnd.setHours(23, 59, 59, 999);
+        return dayEnd < now;
+      }
+    }
+  }
+
+  // Can't determine end — assume event is ongoing/upcoming
+  return false;
+}
+
 function useInView(threshold = 0.4) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
@@ -114,6 +157,7 @@ export default function EventsNoticeboard() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [now, setNow] = useState(new Date());
   const [headerRef, headerIn] = useInView(0.5);
 
   useEffect(() => {
@@ -133,7 +177,16 @@ export default function EventsNoticeboard() {
     };
   }, []);
 
-  const todayName = new Date().toLocaleDateString("en-US", { weekday: "long" });
+  // keep `now` updated so past events are removed in near-real time
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const todayName = now.toLocaleDateString("en-US", { weekday: "long" });
+
+  // filter out finished events and cap to 12 items (allow multiple events per day)
+  const activeEvents = events.filter((ev) => !isEventPast(ev, now)).slice(0, 12);
 
   return (
     <section id="community" className="relative overflow-hidden bg-brand-cream py-20 sm:py-28">
@@ -170,14 +223,21 @@ export default function EventsNoticeboard() {
           ) : (
             <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
               {loading
-                ? Array.from({ length: 7 }).map((_, i) => <NoteSkeleton key={i} index={i} />)
-                : events.map((event, index) => (
+                ? Array.from({ length: 12 }).map((_, i) => <NoteSkeleton key={i} index={i} />)
+                : activeEvents.length > 0
+                ? activeEvents.map((event, index) => (
                     <PinnedNote
-                      key={event.day}
+                      key={event.id ?? `${event.day}-${index}`}
                       event={event}
                       index={index}
                       isToday={event.day === todayName}
                     />
+                  ))
+                : // no upcoming events
+                  Array.from({ length: 1 }).map((_, i) => (
+                    <div key={`empty-${i}`} className="col-span-2 py-10 text-center font-body text-brand-navy/60">
+                      No upcoming events.
+                    </div>
                   ))}
             </div>
           )}

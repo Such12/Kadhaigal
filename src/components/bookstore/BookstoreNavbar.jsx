@@ -1,25 +1,65 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useNavigate, Link } from 'react-router-dom'
 import { X, ShoppingBag, User, Search } from 'lucide-react'
 import { categories } from '../../data/categories.js'
+import { getBooks } from '../../lib/booksStore.js'
 
 const links = [
   { label: 'Books', href: '/bookstore', end: true },
   { label: "Children's Books", href: '/bookstore/kids' },
   { label: 'Events', href: '/events' },
   { label: 'About', href: '/about' },
-  { label: 'Contact Us', href: '/contact' },
 ]
 
 export default function BookstoreNavbar({ query = '', onQueryChange }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [localQuery, setLocalQuery] = useState('')
+  const [suggestions, setSuggestions] = useState([])
   const inputRef = useRef(null)
   const navigate = useNavigate()
 
   const isControlled = typeof onQueryChange === 'function'
   const inputValue = isControlled ? query : localQuery
+
+  const visibleSuggestions = useMemo(() => {
+    const q = (inputValue || '').trim().toLowerCase()
+    if (!q) return []
+    return suggestions.filter((book) => {
+      const title = (book.title || '').toLowerCase()
+      const author = (book.author || '').toLowerCase()
+      const genre = (book.genre || '').toLowerCase()
+      return title.includes(q) || author.includes(q) || genre.includes(q)
+    }).slice(0, 6)
+  }, [inputValue, suggestions])
+
+  useEffect(() => {
+    if (!searchOpen) {
+      setSuggestions([])
+      return
+    }
+
+    const trimmed = (inputValue || '').trim()
+    if (!trimmed) {
+      setSuggestions([])
+      return
+    }
+
+    let active = true
+    getBooks().then((books) => {
+      if (!active) return
+      const q = trimmed.toLowerCase()
+      const next = books.filter((book) => {
+        const title = (book.title || '').toLowerCase()
+        const author = (book.author || '').toLowerCase()
+        const genre = (book.genre || '').toLowerCase()
+        return title.includes(q) || author.includes(q) || genre.includes(q)
+      }).slice(0, 6)
+      setSuggestions(next)
+    })
+
+    return () => { active = false }
+  }, [inputValue, searchOpen])
 
   // Auto-focus input when overlay opens
   useEffect(() => {
@@ -42,22 +82,38 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
   }, [])
 
   function handleChange(e) {
+    const value = e.target.value
     if (isControlled) {
-      onQueryChange(e.target.value)
+      onQueryChange(value)
     } else {
-      setLocalQuery(e.target.value)
+      setLocalQuery(value)
     }
+  }
+
+  function handleSearchSubmit(value) {
+    const term = (value || '').trim()
+    if (!term) return
+
+    if (isControlled) {
+      onQueryChange(term)
+    } else {
+      setLocalQuery(term)
+    }
+
+    navigate(`/bookstore/search?q=${encodeURIComponent(term)}`)
+    setSearchOpen(false)
   }
 
   function handleKeyDown(e) {
     if (e.key === 'Enter') {
-      if (isControlled) {
-        setSearchOpen(false)
-      } else if (localQuery.trim()) {
-        navigate(`/bookstore?q=${encodeURIComponent(localQuery.trim())}`)
-        setSearchOpen(false)
-      }
+      handleSearchSubmit(inputValue)
     }
+  }
+
+  function handleSuggestionClick(book) {
+    const term = book.title || book.author || book.genre || ''
+    if (!term) return
+    handleSearchSubmit(term)
   }
 
   function handleCategoryClick() {
@@ -124,7 +180,7 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
             </p>
 
             {/* Underline input — minimal, like the reference */}
-            <div className="relative border-b border-brand-navy/20 mb-12">
+            <div className="relative border-b border-brand-navy/20 mb-4">
               <input
                 ref={inputRef}
                 value={inputValue}
@@ -145,6 +201,28 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
                 <Search size={18} className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-navy/30" />
               )}
             </div>
+
+            {/* Suggestions dropdown */}
+            {visibleSuggestions.length > 0 && (
+              <div className="mb-12 rounded-2xl border border-brand-navy/10 bg-white/60 backdrop-blur-sm overflow-hidden shadow-sm">
+                {visibleSuggestions.map((book) => (
+                  <button
+                    key={book.id}
+                    type="button"
+                    onClick={() => handleSuggestionClick(book)}
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-brand-cream"
+                  >
+                    <div>
+                      <p className="text-brand-navy font-medium">{book.title}</p>
+                      <p className="text-sm text-brand-navy/60">{book.author || book.genre || 'Book'}</p>
+                    </div>
+                    {book.price ? (
+                      <span className="text-sm text-brand-brick font-semibold">₹{book.price}</span>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* CATEGORIES section */}
             <p className="font-display font-extrabold text-xs tracking-[0.25em] uppercase text-brand-navy mb-5">
@@ -167,7 +245,7 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
                 onClick={handleCategoryClick}
                 className="px-4 py-2 rounded-full border border-brand-navy/15 bg-brand-cream text-brand-navy text-sm font-body font-medium hover:bg-brand-navy hover:text-brand-cream transition-colors duration-200"
               >
-                Children's Books
+                {"Children's Books"}
               </Link>
             </div>
 

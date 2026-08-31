@@ -9,6 +9,7 @@ import HomePage from './app/public/page.jsx'
 import AboutPage from './app/public/about/page.jsx'
 import EventsPage from './app/public/events/page.jsx'
 import BookstorePage from './app/public/bookstore/page.jsx'
+import BookstoreSearchPage from './app/public/bookstore/search/page.jsx'
 import KidsBookstorePage from './app/public/bookstore/kids/page.jsx'
 import GenrePage from './app/public/bookstore/genre/page.jsx'
 import BookDetailPage from './app/public/bookstore/id/page.jsx'
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="bookstore" element={<BookstorePage />} />
+          <Route path="bookstore/search" element={<BookstoreSearchPage />} />
           <Route path="bookstore/kids" element={<KidsBookstorePage />} />
           <Route path="bookstore/genre/:genre" element={<GenrePage />} />
           <Route path="bookstore/:id" element={<BookDetailPage />} />

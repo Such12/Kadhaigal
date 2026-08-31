@@ -1,80 +1,81 @@
+// src/components/home/ChildrensBooksSection.jsx
+
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
 import { getBooks } from '../../lib/booksStore.js'
-import ImagePlaceholder from '../ui/ImagePlaceholder.jsx'
 
-// Fallback curated books if database has no records yet
-const FALLBACK_TRENDING = [
+// Fallback curated children's books if database has no records yet
+const FALLBACK_CHILDRENS = [
   {
-    id: 'tr-1',
-    title: 'The God of Small Things',
-    author: 'Arundhati Roy',
-    genre: 'Fiction and Literature',
-    price: 399,
-    originalPrice: 499,
-    imageLinks: {
-      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1554604477i/9777.jpg',
-    },
-    badge: 'Popular',
-  },
-  {
-    id: 'tr-2',
-    title: 'Days at the Morisaki Bookshop',
-    author: 'Satoshi Yagisawa',
-    genre: 'Fiction and Literature',
-    price: 350,
-    originalPrice: 450,
-    imageLinks: {
-      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1684941961i/64000492.jpg',
-    },
-    badge: 'Top Pick',
-  },
-  {
-    id: 'tr-3',
-    title: 'Before the Coffee Gets Cold',
-    author: 'Toshikazu Kawaguchi',
-    genre: 'Sci-Fic',
+    id: 'cb-1',
+    title: 'Malgudi Days',
+    author: 'R. K. Narayan',
+    genre: "Children's Books",
     price: 299,
     originalPrice: 399,
     imageLinks: {
-      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1569420790i/44421460.jpg',
+      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1442528723i/14082.jpg',
     },
-    badge: 'Trending',
+    badge: 'Classic',
   },
   {
-    id: 'tr-4',
-    title: 'Smoke and Ashes: A Writer\'s Journey',
-    author: 'Amitav Ghosh',
-    genre: 'Non-Fiction',
-    price: 550,
-    originalPrice: 699,
+    id: 'cb-2',
+    title: 'The Very Hungry Caterpillar',
+    author: 'Eric Carle',
+    genre: "Children's Books",
+    price: 350,
+    originalPrice: 450,
     imageLinks: {
-      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1680587788i/124939226.jpg',
+      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1554388839i/4948.jpg',
     },
     badge: 'Bestseller',
   },
   {
-    id: 'tr-5',
-    title: 'The Psychology of Money',
-    author: 'Morgan Housel',
-    genre: 'Non-Fiction',
+    id: 'cb-3',
+    title: 'Matilda',
+    author: 'Roald Dahl',
+    genre: "Children's Books",
+    price: 399,
+    originalPrice: 499,
+    imageLinks: {
+      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388241851i/39988.jpg',
+    },
+    badge: 'Top Pick',
+  },
+  {
+    id: 'cb-4',
+    title: 'Where the Wild Things Are',
+    author: 'Maurice Sendak',
+    genre: "Children's Books",
+    price: 450,
+    originalPrice: 550,
+    imageLinks: {
+      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1388434442i/19543.jpg',
+    },
+    badge: 'Popular',
+  },
+  {
+    id: 'cb-5',
+    title: 'Grandma\'s Bag of Stories',
+    author: 'Sudha Murty',
+    genre: "Children's Books",
+    price: 250,
+    originalPrice: 299,
+    imageLinks: {
+      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1423472099i/24892419.jpg',
+    },
+    badge: 'Favorite',
+  },
+  {
+    id: 'cb-6',
+    title: 'Charlotte\'s Web',
+    author: 'E. B. White',
+    genre: "Children's Books",
     price: 320,
     originalPrice: 399,
     imageLinks: {
-      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1581527774i/41881472.jpg',
-    },
-    badge: 'Hot',
-  },
-  {
-    id: 'tr-6',
-    title: 'Klara and the Sun',
-    author: 'Kazuo Ishiguro',
-    genre: 'Sci-Fic',
-    price: 450,
-    originalPrice: 599,
-    imageLinks: {
-      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1603206535i/54120408.jpg',
+      thumbnail: 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1628267712i/24178.jpg',
     },
     badge: 'Award Winner',
   },
@@ -96,10 +97,9 @@ function getBookCover(book) {
   return url.replace('http://', 'https://')
 }
 
-export default function WhatsTrending() {
+export default function ChildrensBooksSection() {
   const [books, setBooks] = useState([])
   const [loading, setLoading] = useState(true)
-  const [addedIds, setAddedIds] = useState({})
   const [failedImages, setFailedImages] = useState({})
   const scrollRef = useRef(null)
 
@@ -109,22 +109,22 @@ export default function WhatsTrending() {
       try {
         setLoading(true)
         const all = await getBooks()
-        // Filter out children's books
+        // Filter strictly for children's books
         const filtered = (all || []).filter((b) => {
           const cat = (b.genre || (Array.isArray(b.categories) ? b.categories.join(' ') : '') || '').toLowerCase()
-          return !cat.includes('child') && !cat.includes('kid') && !cat.includes('age')
+          return cat.includes('child') || cat.includes('kid') || cat.includes('age') || cat.includes('picture')
         })
 
         if (isMounted) {
           if (filtered.length > 0) {
             setBooks(filtered)
           } else {
-            setBooks(FALLBACK_TRENDING)
+            setBooks(FALLBACK_CHILDRENS)
           }
         }
       } catch (err) {
-        console.warn('Could not load trending books from database, using curated list:', err)
-        if (isMounted) setBooks(FALLBACK_TRENDING)
+        console.warn('Could not load children\'s books from database, using curated list:', err)
+        if (isMounted) setBooks(FALLBACK_CHILDRENS)
       } finally {
         if (isMounted) setLoading(false)
       }
@@ -142,33 +142,24 @@ export default function WhatsTrending() {
     }
   }
 
-  const handleAddToCart = (e, bookId) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setAddedIds((prev) => ({ ...prev, [bookId]: true }))
-    setTimeout(() => {
-      setAddedIds((prev) => ({ ...prev, [bookId]: false }))
-    }, 2000)
-  }
-
-  const displayBooks = books.length > 0 ? books : (loading ? [] : FALLBACK_TRENDING)
+  const displayBooks = books.length > 0 ? books : (loading ? [] : FALLBACK_CHILDRENS)
 
   return (
-    <section className="relative bg-brand-cream/60 py-6 sm:py-10 overflow-hidden ">
+    <section className="relative bg-brand-cream/60 py-6 sm:py-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
         {/* Header with Title & View All on right */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
           <div>
             <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-brand-navy tracking-tight">
-              What's Trending
+              Children's Books
             </h2>
           </div>
 
           <Link
-            to="/bookstore"
+            to="/bookstore/kids"
             className="group inline-flex items-center gap-1.5 rounded-full bg-brand-navy px-5 py-2 font-body text-xs sm:text-sm font-semibold text-brand-cream shadow-sm transition-all duration-300 hover:bg-brand-brick hover:-translate-y-0.5 hover:shadow-md shrink-0 self-start sm:self-auto"
           >
-            View All
+            View All 
             <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
         </div>
@@ -191,7 +182,7 @@ export default function WhatsTrending() {
             style={{ scrollSnapType: 'x mandatory' }}
           >
             {loading ? (
-              /* Smooth Loading Skeletons */
+              /* Loading Skeletons */
               Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={`skel-${i}`}
@@ -228,7 +219,7 @@ export default function WhatsTrending() {
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           />
                         ) : (
-                          /* Stylized Fallback Cover */
+                          /* Fallback Cover */
                           <div className="w-full h-full p-3.5 bg-gradient-to-br from-[#1b3563] to-[#142950] text-brand-cream flex flex-col justify-between shadow-inner">
                             <span className="h-0.5 w-6 bg-brand-brick/80 rounded" />
                             <div>

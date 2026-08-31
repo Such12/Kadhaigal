@@ -45,7 +45,7 @@ export const allCategories = [
   {
     name: 'Art & Lifestyle',
     slug: 'art-lifestyle',
-    tags: ['Art', 'Design', 'Food', 'Adult Colouring'],
+    tags: ['Art', 'Design', 'Food', 'Adult Colouring', 'Lifestyle'],
     description: 'Creative expression, aesthetics, and the art of living beautifully.',
   },
   {
@@ -59,4 +59,4 @@ export const allCategories = [
 // Public-facing list — Children's Books excluded (it has its own dedicated page)
 export const categories = allCategories.filter(
   (c) => c.slug !== 'childrens-books'
-)
+)

@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { X, Search, Loader2, AlertCircle, RefreshCw } from 'lucide-react'
 import { fetchBookByIsbn, BookNotFoundError, RateLimitError } from '../../../lib/googleBooksApi.js'
 import { getBookByIsbn } from '../../../lib/booksStore.js'
-import { categories } from '../../../data/categories.js'
+import { allCategories } from '../../../data/categories.js'
 
-const GENRES = categories.map(c => c.name)
+const GENRES = allCategories.map(c => c.name)
 
 function splitList(str) {
   return str
@@ -23,7 +23,7 @@ function emptyForm() {
     description: '',
     isbn: '',
     pageCount: '',
-    categories: '',
+    allCategories: '',
     language: 'en',
     thumbnail: '',
     smallThumbnail: '',
@@ -68,7 +68,7 @@ function bookToForm(book) {
     description: book.description ?? '',
     isbn: book.industryIdentifiers?.[0]?.identifier ?? '',
     pageCount: book.pageCount ?? '',
-    categories: (book.categories ?? []).join(', '),
+    allCategories: (book.allCategories ?? []).join(', '),
     language: book.language ?? 'en',
     thumbnail: book.imageLinks?.thumbnail ?? '',
     smallThumbnail: book.imageLinks?.smallThumbnail ?? '',
@@ -365,9 +365,9 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                 <Field label="Language" hint="ISO code, e.g. en, ta">
                   <input value={form.language} onChange={(e) => set('language', e.target.value)} className={inputClass} />
                 </Field>
-                <Field label="Categories" hint="Comma-separated, from Google Books" span={2}>
-                  <input value={form.categories} onChange={(e) => set('categories', e.target.value)} className={inputClass} />
-                </Field>
+                {/* <Field label="Categories" hint="Comma-separated, from Google Books" span={2}>
+                  <input value={form.allCategories} onChange={(e) => set('allCategories', e.target.value)} className={inputClass} />
+                </Field> */}
                 <Field label="Cover Image URL" span={2}>
                   <input value={form.thumbnail} onChange={(e) => set('thumbnail', e.target.value)} className={inputClass} />
                 </Field>
@@ -397,7 +397,7 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                     disabled={!form.genre}
                   >
                     <option value="">Select a sub-genre…</option>
-                    {categories.find(c => c.name === form.genre)?.tags.map(tag => (
+                    {allCategories.find(c => c.name === form.genre)?.tags.map(tag => (
                       <option key={tag} value={tag}>{tag}</option>
                     ))}
                   </select>

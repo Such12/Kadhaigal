@@ -153,7 +153,7 @@ export default function ThreePillars() {
   const [headerRef, headerIn] = useInView(0.5);
 
   return (
-    <section className="relative overflow-hidden bg-brand-cream py-16 sm:py-24">
+    <section className="relative overflow-hidden bg-brand-cream py-6 sm:py-12">
       <div className="mx-auto max-w-6xl px-6">
         <div
           ref={headerRef}

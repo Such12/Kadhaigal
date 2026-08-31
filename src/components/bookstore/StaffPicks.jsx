@@ -141,9 +141,9 @@ function ReviewPanel({ book, animKey }) {
         <span className="text-lg font-extrabold text-brand-navy">₹{book.price}</span>
         <Link
           to={`/bookstore/${book.id}`}
-          className="inline-flex items-center gap-1.5 bg-brand-brick text-white text-[11px] font-semibold px-4.5 py-2 rounded-full hover:bg-[#9c380c] transition-all hover:shadow-md hover:-translate-y-0.5"
+          className="p-2 px-4 inline-flex items-center gap-1.5 bg-brand-brick text-white text-[11px] font-semibold px-4.5 py-2 rounded-full hover:bg-[#9c380c] transition-all hover:shadow-md hover:-translate-y-0.5"
         >
-          View Book Details
+          View Book
         </Link>
       </div>
     </FadeIn>
@@ -156,7 +156,7 @@ function CentreBook({ book, animKey }) {
   return (
     <FadeIn animKey={animKey} className="flex flex-col items-center">
       <Link to={`/bookstore/${book.id}`} className="group block w-full max-w-[200px] sm:max-w-[240px] md:max-w-[260px] mx-auto">
-        <div className="relative overflow-hidden rounded-2xl shadow-polaroid aspect-[2/3] w-full bg-brand-navy/[0.05]">
+        <div className="relative overflow-hidden  shadow-polaroid aspect-[2/3] w-full bg-brand-navy/[0.05]">
           {thumbnail ? (
             <img
               src={thumbnail}
@@ -183,10 +183,10 @@ function ThumbCard({ book, onClick }) {
     <button
       onClick={onClick}
       className="group text-left block w-full transition-all duration-300 outline-none
-        focus-visible:ring-2 focus-visible:ring-brand-brick rounded-xl opacity-85 hover:opacity-100"
+        focus-visible:ring-2 focus-visible:ring-brand-brick  opacity-85 hover:opacity-100"
     >
       {/* Cover */}
-      <div className="relative overflow-hidden rounded-xl shadow-card aspect-[2/3] w-24 sm:w-28 lg:w-28 mx-auto bg-brand-navy/[0.03] transition-all duration-300 group-hover:shadow-polaroid">
+      <div className="relative overflow-hidden shadow-card aspect-[2/3] w-24 sm:w-28 lg:w-28 mx-auto bg-brand-navy/[0.03] transition-all duration-300 group-hover:shadow-polaroid">
         {thumbnail ? (
           <img
             src={thumbnail}
@@ -210,8 +210,8 @@ function ThumbCard({ book, onClick }) {
           {author}
         </p>
         <div className="flex items-center justify-center gap-1.5 mt-1">
-          {book.rating && <Stars rating={book.rating} size={9} />}
-          <span className="text-[10px] font-bold text-brand-brick">₹{book.price}</span>
+          {book.rating && <Stars rating={book.rating} size={10} />}
+          <span className="text-[14px] font-bold text-brand-brick">₹{book.price}</span>
         </div>
       </div>
     </button>
@@ -261,7 +261,7 @@ export default function StaffPicks({ books }) {
 
         {/* ── Right: 2×2 thumbnail grid ── */}
         <div className="w-full order-1 lg:order-none">
-          <div className="grid grid-cols-4 lg:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-4 lg:grid-cols-2 gap-y-3 sm:gap-y-4 gap-x-1 sm:gap-x-2">
             {picks.map((book, i) => {
               if (i === safeIdx) return null // skip active in grid
               return (
