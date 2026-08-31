@@ -1,4 +1,5 @@
-export const categories = [
+// Full list — used by admin when adding/editing books
+export const allCategories = [
   {
     name: 'Non-Fiction',
     slug: 'non-fiction',
@@ -54,3 +55,8 @@ export const categories = [
     description: 'Stories that spark imagination and grow with young readers.',
   },
 ]
+
+// Public-facing list — Children's Books excluded (it has its own dedicated page)
+export const categories = allCategories.filter(
+  (c) => c.slug !== 'childrens-books'
+)

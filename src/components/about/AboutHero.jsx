@@ -1,9 +1,13 @@
-import PhotoPlaceholder from './PhotoPlaceholder.jsx'
+import bookshelfHero from '../../assets/images/bookshelf-hero.jpg'
 
 export default function AboutHero() {
   return (
     <section className="relative h-[420px] sm:h-[520px] overflow-hidden">
-      <PhotoPlaceholder variant="shelf" className="absolute inset-0 w-full h-full" />
+      <img
+        src={bookshelfHero}
+        alt="Kadhaigal bookshelf"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
       <div className="absolute inset-0 bg-brand-navy/45" />
 
       <div className="relative h-full container-page flex flex-col items-center justify-center text-center">

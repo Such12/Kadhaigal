@@ -143,7 +143,6 @@ export default function EventsNoticeboard() {
           className={`flex flex-col items-center text-center transition-all duration-700 ease-out
             ${headerIn ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
         >
-          <span className="font-hand text-2xl text-brand-sage">Chapter III · pg. 41</span>
           <h2 className="mt-2 font-display text-4xl font-bold text-brand-navy sm:text-5xl">
             This Week at Kadhaigal
           </h2>

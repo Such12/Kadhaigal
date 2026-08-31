@@ -9,6 +9,7 @@ import {
 import ImagePlaceholder from '../ui/ImagePlaceholder.jsx'
 import Button from '../ui/Button.jsx'
 import Input from '../ui/Input.jsx'
+import { allCategories } from '../../data/categories.js'
 
 const emptyStaffNote = { by: '', role: '', quote: '', body: '' }
 
@@ -129,7 +130,16 @@ export default function BooksManager() {
           <div className="grid sm:grid-cols-2 gap-4">
             <Input placeholder="Title" value={form.title} onChange={handleChange('title')} className="bg-brand-cream" />
             <Input placeholder="Author" value={form.author} onChange={handleChange('author')} className="bg-brand-cream" />
-            <Input placeholder="Genre" value={form.genre} onChange={handleChange('genre')} className="bg-brand-cream" />
+            <select
+              value={form.genre}
+              onChange={handleChange('genre')}
+              className="w-full rounded-2xl px-5 py-3 text-sm text-brand-navy bg-brand-cream border border-brand-navy/10 focus:outline-none focus:ring-2 focus:ring-brand-sage appearance-none"
+            >
+              <option value="">Select genre…</option>
+              {allCategories.map((c) => (
+                <option key={c.slug} value={c.name}>{c.name}</option>
+              ))}
+            </select>
             <Input
               type="number"
               min="0"
