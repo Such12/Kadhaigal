@@ -161,7 +161,7 @@ export default function ThreePillars() {
             ${headerIn ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
         >
           <h2 className="font-display text-4xl font-bold text-brand-navy sm:text-5xl">
-            The Three Pillars
+            What We Strive For
           </h2>
           <p className="mt-3 font-display text-lg italic text-brand-navy/60">
             Our foundation is built on more than just bricks and mortar.

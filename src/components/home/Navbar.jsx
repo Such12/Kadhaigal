@@ -8,7 +8,6 @@ const links = [
   { label: "Children's Books", href: '/bookstore/kids' },
   { label: 'Events', href: '/events' },
   { label: 'About', href: '/about' },
-  { label: 'Contact Us', href: '/contact' },
 ]
 
 export default function Navbar() {

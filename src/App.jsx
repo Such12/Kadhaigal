@@ -12,7 +12,6 @@ import BookstorePage from './app/public/bookstore/page.jsx'
 import KidsBookstorePage from './app/public/bookstore/kids/page.jsx'
 import GenrePage from './app/public/bookstore/genre/page.jsx'
 import BookDetailPage from './app/public/bookstore/id/page.jsx'
-import ContactPage from './app/public/contact/page.jsx'
 
 // admin pages
 import AdminLoginPage from './app/admin/login/page.jsx'
@@ -36,7 +35,6 @@ export default function App() {
           <Route path="bookstore/kids" element={<KidsBookstorePage />} />
           <Route path="bookstore/genre/:genre" element={<GenrePage />} />
           <Route path="bookstore/:id" element={<BookDetailPage />} />
-          <Route path="contact" element={<ContactPage />} />
         </Route>
 
         {/* admin */}
