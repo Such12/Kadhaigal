@@ -8,6 +8,8 @@ import BrowseByGenre from '../../components/home/Browsebygenre.jsx'
 import EventsNoticeboard from '../../components/home/EventsNoticeboard.jsx'
 import JoinCommunity from '../../components/home/JoinCommunity.jsx'
 //import MenuPreview from '../../components/home/MenuPreview.jsx'
+import MenuPreview from '../../components/home/MenuPreview.jsx'
+import KaboomBookOfTheMonth from '../../components/home/KaboomBookOfTheMonth.jsx'
 
 export default function HomePage() {
   return (
@@ -20,6 +22,7 @@ export default function HomePage() {
       <ChildrensBooksSection />
       <BrowseByGenre />
       {/* <MenuPreview /> */}
+      <KaboomBookOfTheMonth />
       <EventsNoticeboard />
       <JoinCommunity />
     </>

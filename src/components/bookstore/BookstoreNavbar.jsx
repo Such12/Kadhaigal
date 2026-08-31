@@ -123,7 +123,7 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
   return (
     <>
       {/* ── Main header bar ── */}
-      <header className="relative z-30 flex items-center px-6 sm:px-10 lg:px-16 py-5 bg-brand-cream">
+      <header className="sticky top-0 z-40 flex items-center px-6 sm:px-10 lg:px-16 py-4 sm:py-5 bg-brand-cream/95 backdrop-blur-md border-b border-brand-navy/5 transition-all">
         <a href="/" className="flex items-center shrink-0">
           <img src="/logo.svg" alt="Kadhaigal" className="h-10 sm:h-12 w-auto" />
         </a>

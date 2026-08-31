@@ -15,7 +15,7 @@ export default function KidsBookstorePage() {
   }, [])
 
   return (
-    <div className="kids-page min-h-screen relative overflow-x-hidden bg-brand-cream">
+    <div className="kids-page min-h-screen relative overflow-x-clip bg-brand-cream">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
         

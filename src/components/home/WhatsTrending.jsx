@@ -232,7 +232,7 @@ export default function WhatsTrending() {
                           <div className="w-full h-full p-3.5 bg-gradient-to-br from-[#1b3563] to-[#142950] text-brand-cream flex flex-col justify-between shadow-inner">
                             <span className="h-0.5 w-6 bg-brand-brick/80 rounded" />
                             <div>
-                              <p className="font-display font-bold text-xs leading-tight line-clamp-3">
+                              <p className="font-display font text-xs leading-tight line-clamp-3">
                                 {book.title}
                               </p>
                               <p className="text-[10px] opacity-70 mt-1 truncate">
