@@ -56,12 +56,6 @@ export default function LocalShelf({
           </h2>
           <p className="text-sm text-brand-navy/60 mt-3">{description}</p>
         </div>
-        <Link
-          to={viewAllHref}
-          className="hidden sm:inline-flex items-center gap-1.5 bg-brand-brick text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[#9c380c] transition-colors shrink-0"
-        >
-          Meet the Authors <ArrowRight size={14} />
-        </Link>
       </div>
 
       {/* mobile swipe hint */}

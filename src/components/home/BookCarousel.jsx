@@ -117,13 +117,6 @@ function BestsellerBookCard({ book, index }) {
           perspective: "1200px",
         }}
       >
-        {/* Vintage Rank Seal / Wax Badge */}
-        <div
-          className={`absolute -top-3 -left-3 z-30 flex h-10 w-10 items-center justify-center rounded-full ${colors.badge} font-display text-xs font-bold shadow-lg border-2 border-white/80 ring-2 ring-brand-navy/10 transform -rotate-12 transition-transform duration-300 group-hover:rotate-0 group-hover:scale-110`}
-        >
-          #{book.rank}
-        </div>
-
         {/* The 3D Book Cover Container */}
         <div className="relative w-48 sm:w-52 h-64 sm:h-72 rounded-r-md rounded-l-sm bg-[#111] shadow-2xl overflow-hidden border-l-[6px] border-l-brand-navy/60 transition-shadow duration-500 group-hover:shadow-[0_25px_50px_-12px_rgba(20,41,80,0.35)]">
           {/* Spine crease reflection */}
