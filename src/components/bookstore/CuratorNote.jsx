@@ -3,6 +3,8 @@ import { BookOpen } from 'lucide-react'
 export default function CuratorNote({ note }) {
   if (!note) return null
 
+  const authorName = note.by || note.recommendedBy
+
   return (
     <div className="bg-white rounded-2xl shadow-card p-6 sm:p-7">
       <div className="flex items-center gap-3 mb-4">
@@ -11,9 +13,15 @@ export default function CuratorNote({ note }) {
         </div>
         <div>
           <p className="font-display font-bold text-sm text-brand-navy">Curator's Note</p>
-          <p className="text-[10px] uppercase tracking-wide text-brand-navy/40">
-            Recommended by {note.recommendedBy}
-          </p>
+          {authorName ? (
+            <p className="text-[10px] uppercase tracking-wide text-brand-navy/40">
+              Recommended by {authorName}{note.role ? ` • ${note.role}` : ''}
+            </p>
+          ) : (
+            <p className="text-[10px] uppercase tracking-wide text-brand-navy/40">
+              Staff Pick Highlight
+            </p>
+          )}
         </div>
       </div>
 

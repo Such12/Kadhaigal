@@ -49,10 +49,6 @@ function emptyForm() {
     staffRole: '',
     staffQuote: '',
     staffBody: '',
-    hasCuratorNote: false,
-    curatorBy: '',
-    curatorQuote: '',
-    curatorBody: '',
     isSelfPublished: false,
     printLocation: '',
     printNote: '',
@@ -94,10 +90,6 @@ function bookToForm(book) {
     staffRole: book.staffNote?.role ?? '',
     staffQuote: book.staffNote?.quote ?? '',
     staffBody: book.staffNote?.body ?? '',
-    hasCuratorNote: !!book.curatorNote,
-    curatorBy: book.curatorNote?.recommendedBy ?? '',
-    curatorQuote: book.curatorNote?.quote ?? '',
-    curatorBody: book.curatorNote?.body ?? '',
     isSelfPublished: !!book.isSelfPublished,
     printLocation: book.printLocation ?? '',
     printNote: book.printNote ?? '',
@@ -143,9 +135,6 @@ function formToBook(form) {
     isStaffPick: form.isStaffPick,
     staffNote: form.isStaffPick
       ? { by: (form.staffBy ?? '').trim(), role: (form.staffRole ?? '').trim(), quote: (form.staffQuote ?? '').trim(), body: (form.staffBody ?? '').trim() }
-      : undefined,
-    curatorNote: form.hasCuratorNote
-      ? { recommendedBy: (form.curatorBy ?? '').trim(), quote: (form.curatorQuote ?? '').trim(), body: (form.curatorBody ?? '').trim() }
       : undefined,
     isSelfPublished: form.isSelfPublished,
     printLocation: form.isSelfPublished ? (form.printLocation ?? '').trim() : undefined,
@@ -502,29 +491,6 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                     </Field>
                     <Field label="Full Note" span={2}>
                       <textarea value={form.staffBody} onChange={(e) => set('staffBody', e.target.value)} rows={3} className={inputClass} />
-                    </Field>
-                  </>
-                )}
-              </Section>
-
-              <Section title="Curator Highlight">
-                <Field span={2}>
-                  <Checkbox
-                    checked={form.hasCuratorNote}
-                    onChange={(v) => set('hasCuratorNote', v)}
-                    label="Add a curator highlight (independent of staff pick)"
-                  />
-                </Field>
-                {form.hasCuratorNote && (
-                  <>
-                    <Field label="Recommended By" span={2}>
-                      <input value={form.curatorBy} onChange={(e) => set('curatorBy', e.target.value)} className={inputClass} />
-                    </Field>
-                    <Field label="Pull Quote" span={2}>
-                      <input value={form.curatorQuote} onChange={(e) => set('curatorQuote', e.target.value)} className={inputClass} />
-                    </Field>
-                    <Field label="Full Note" span={2}>
-                      <textarea value={form.curatorBody} onChange={(e) => set('curatorBody', e.target.value)} rows={3} className={inputClass} />
                     </Field>
                   </>
                 )}

@@ -144,7 +144,7 @@ export default function Footer() {
               <span className="group-hover:hidden">Made by </span>
               <span className="hidden group-hover:inline">Please don't inspect the code :) </span>
               <a
-                href="https://arivay.com"
+                href="https://arivay.in"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-brand-brick hover:text-brand-brick/80 transition-colors font-semibold"

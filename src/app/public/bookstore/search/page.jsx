@@ -47,9 +47,7 @@ export default function BookstoreSearchPage() {
           <p className="text-brand-navy/60">Searching for books…</p>
         ) : results.length === 0 ? (
           <div className="rounded-[2rem] border border-brand-navy/10 bg-brand-cream px-6 py-10 text-center shadow-sm sm:px-10">
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-brand-brick/10 text-3xl">
-              📚
-            </div>
+
             <p className="font-display text-3xl sm:text-4xl text-brand-navy">No book found for “{query}” yet.</p>
             <p className="mx-auto mt-4 max-w-xl text-brand-navy/70">
               We&apos;re still gathering a few lovely pages for that search. Try a nearby title, author, or explore a similar shelf.

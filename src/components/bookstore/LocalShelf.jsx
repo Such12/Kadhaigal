@@ -1,18 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, MapPin } from 'lucide-react'
-import ImagePlaceholder from '../ui/ImagePlaceholder.jsx'
-// Adjust this import path to wherever your data layer file actually lives,
-// e.g. '../../lib/books.js' or '../../data/books.js'.
+import { ArrowRight, ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
 import { getLocalShelfBooks } from '../../lib/booksStore.js'
-
-// Fixed lean angles so the shelf feels hand-arranged, not randomly jittered on every render.
-const LEAN_ANGLES = [-3, 2, -1.5, 3, -2.5, 1.5, -1]
 
 // Rotation for the stamp badge, alternates so stamps don't all tilt the same way.
 const STAMP_ANGLES = [-9, 7, -6, 8]
 
-// Maps the Google-Books-style ISO language code to a display label for the stamp.
+// Maps the ISO language code to a display label for the stamp.
 const LANGUAGE_LABELS = {
   ta: 'Tamil',
   te: 'Telugu',
@@ -24,13 +18,26 @@ const LANGUAGE_LABELS = {
   en: 'English',
 }
 
+function getBookCover(book) {
+  const url =
+    book.imageLinks?.thumbnail ||
+    book.imageLinks?.smallThumbnail ||
+    book.image_thumbnail ||
+    book.image_small_thumbnail ||
+    book.cover ||
+    ''
+
+  if (!url) return ''
+  return url.replace('http://', 'https://')
+}
+
 export default function LocalShelf({
-  eyebrow = 'Self-Published & Regional',
-  title = 'Off the Beaten Shelf',
-  description = "Books that never went through a big publisher, printed close to home, in the languages we grew up with. First runs, second runs, and a few the author still hand-delivers.",
+  title = 'Our Regional Shelf',
   viewAllHref = '/bookstore/local',
 }) {
   const [books, setBooks] = useState(null) // null = loading
+  const [failedImages, setFailedImages] = useState({})
+  const scrollRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
@@ -42,125 +49,166 @@ export default function LocalShelf({
     }
   }, [])
 
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const offset = direction === 'left' ? -340 : 340
+      scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' })
+    }
+  }
+
   if (books !== null && books.length === 0) return null
 
   return (
-    <section className="container-page pt-20 sm:pt-28 pb-20 sm:pb-24">
-      <div className="flex items-start justify-between gap-6 mb-10">
-        <div className="max-w-xl">
-          <p className="font-hand text-2xl text-brand-brick leading-none mb-1">
-            {eyebrow}
-          </p>
-          <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy">
-            {title}
-          </h2>
-          <p className="text-sm text-brand-navy/60 mt-3">{description}</p>
+    <section className="relative bg-brand-cream/60 py-8 sm:py-12 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Header with Title & View All */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
+          <div>
+            <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-brand-navy tracking-tight">
+              {title}
+            </h2>
+          </div>
+
+          <Link
+            to={viewAllHref}
+            className="group inline-flex items-center gap-1.5 rounded-full bg-brand-navy px-5 py-2 font-body text-xs sm:text-sm font-semibold text-brand-cream shadow-sm transition-all duration-300 hover:bg-brand-brick hover:-translate-y-0.5 hover:shadow-md shrink-0 self-start sm:self-auto"
+          >
+            View All
+            <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
         </div>
-      </div>
 
-      {/* mobile swipe hint */}
-      <p className="font-hand text-brand-navy/40 text-lg sm:hidden -mb-2 ml-1">
-        ← swipe the shelf
-      </p>
+        {/* Carousel Container */}
+        <div className="relative">
+          {/* Left Arrow Button */}
+          <button
+            onClick={() => scroll('left')}
+            aria-label="Scroll Left"
+            className="absolute -left-5 sm:-left-8 lg:-left-10 top-[36%] -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-brand-navy/15 bg-white text-brand-navy flex items-center justify-center shadow-md hover:bg-brand-navy hover:text-white transition-all active:scale-95"
+          >
+            <ChevronLeft size={18} />
+          </button>
 
-      <div className="relative mt-8">
-        {/* the shelf ledge, sits behind the books' bottom edge */}
-        <div
-          className="absolute left-0 right-0 bottom-6 h-3 rounded-sm"
-          style={{
-            background: 'linear-gradient(180deg, #EDE0BF 0%, #E3D4A8 100%)',
-            boxShadow: '0 10px 16px -6px rgba(20, 41, 80, 0.28)',
-          }}
-        />
-
-        <div
-          className="flex gap-6 overflow-x-auto pb-10 pt-2 px-1 snap-x snap-mandatory
-                     [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-        >
-          {books === null
-            ? // loading skeleton — same lean/shelf treatment, just muted
-              LEAN_ANGLES.slice(0, 5).map((angle, i) => (
-                <div key={i} className="shrink-0 w-[200px] animate-pulse">
-                  <div
-                    className="w-[200px] h-[280px] rounded-md bg-brand-navy/10"
-                    style={{ transform: `rotate(${angle}deg)` }}
-                  />
-                  <div className="h-3 w-3/4 bg-brand-navy/10 rounded mt-4" />
-                  <div className="h-2.5 w-1/2 bg-brand-navy/10 rounded mt-2" />
+          {/* Horizontal Book Slider */}
+          <div
+            ref={scrollRef}
+            className="flex gap-5 sm:gap-6 overflow-x-auto pb-4 pt-2 px-1 no-scrollbar scroll-smooth"
+            style={{ scrollSnapType: 'x mandatory' }}
+          >
+            {books === null
+              ? Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={`skel-${i}`}
+                  className="flex-shrink-0 w-[155px] sm:w-[175px] animate-pulse"
+                >
+                  <div className="aspect-[2/3] w-full rounded-xl bg-brand-navy/10 mb-3" />
+                  <div className="h-3.5 bg-brand-navy/10 rounded w-3/4 mb-2" />
+                  <div className="h-2.5 bg-brand-navy/10 rounded w-1/2 mb-3" />
                 </div>
               ))
-            : books.map((book, i) => {
-                const author = book.authors?.[0] ?? 'Unknown Author'
-                const language = LANGUAGE_LABELS[book.language] ?? book.language
+              : books.map((book, i) => {
+                const author = book.author || book.authors?.[0] || 'Kadhaigal Collection'
+                const language = LANGUAGE_LABELS[book.language] ?? book.language ?? 'Regional'
                 const note = book.printNote || (book.printLocation ? `Printed in ${book.printLocation}` : '')
-                const cover = book.imageLinks?.thumbnail
+                const coverUrl = getBookCover(book)
+                const hasFailed = failedImages[book.id]
+                const hasDiscount = book.originalPrice && book.originalPrice > book.price
 
                 return (
-                  <div key={book.id} className="group shrink-0 w-[200px] snap-start">
-                    <div
-                      className="relative transition-transform duration-300 ease-out origin-bottom
-                                 group-hover:-translate-y-2 group-hover:rotate-0"
-                      style={{ transform: `rotate(${LEAN_ANGLES[i % LEAN_ANGLES.length]}deg)` }}
-                    >
-                      {/* language stamp, pinned over the top corner of the cover */}
+                  <div
+                    key={book.id}
+                    style={{ scrollSnapAlign: 'start' }}
+                    className="group flex-shrink-0 w-[155px] sm:w-[175px] flex flex-col justify-between transition-all duration-300"
+                  >
+                    {/* Book Cover Container */}
+                    <Link to={`/bookstore/${book.id}`} className="block relative">
+                      {/* Language stamp pinned on the top corner */}
                       <span
-                        className="absolute -top-3 -right-3 z-10 w-14 h-14 rounded-full
-                                   border-2 border-dashed border-brand-brick/70 bg-brand-cream
-                                   flex items-center justify-center shadow-card"
+                        className="absolute -top-2 -right-2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full
+                                     border-2 border-dashed border-brand-brick/70 bg-brand-cream
+                                     flex items-center justify-center shadow-card pointer-events-none"
                         style={{ transform: `rotate(${STAMP_ANGLES[i % STAMP_ANGLES.length]}deg)` }}
                       >
-                        <span className="font-hand text-brand-brick text-sm leading-tight text-center">
+                        <span className="font-hand text-brand-brick text-[11px] sm:text-xs leading-tight text-center">
                           {language}
                         </span>
                       </span>
 
-                      {cover ? (
-                        <img
-                          src={cover}
-                          alt={book.title}
-                          className="w-[200px] h-[280px] object-cover rounded-md shadow-polaroid"
-                        />
-                      ) : (
-                        <ImagePlaceholder
-                          label=""
-                          className="w-[200px] h-[280px] rounded-md shadow-polaroid"
-                        />
-                      )}
-                    </div>
+                      <div className="aspect-[2/3] w-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 relative bg-brand-navy/[0.04]">
+                        {coverUrl && !hasFailed ? (
+                          <img
+                            src={coverUrl}
+                            alt={book.title}
+                            loading="eager"
+                            onError={() => setFailedImages((prev) => ({ ...prev, [book.id]: true }))}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="w-full h-full p-3.5 bg-gradient-to-br from-[#1b3563] to-[#142950] text-brand-cream flex flex-col justify-between shadow-inner">
+                            <span className="h-0.5 w-6 bg-brand-brick/80 rounded" />
+                            <div>
+                              <p className="font-display text-xs leading-tight line-clamp-3">
+                                {book.title}
+                              </p>
+                              <p className="text-[10px] opacity-70 mt-1 truncate">
+                                {author}
+                              </p>
+                            </div>
+                            <span className="text-[9px] uppercase font-mono tracking-widest text-brand-brick font-semibold">
+                              Kadhaigal
+                            </span>
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="mt-4 px-1">
-                      <p className="font-display font-bold text-brand-navy leading-snug">
-                        {book.title}
-                      </p>
-                      <p className="text-xs text-brand-navy/60 mt-0.5">{author}</p>
+                      {/* Title & Author */}
+                      <div className="pt-2.5 pb-0.5">
+                        <h3 className="font-body font-bold text-brand-navy text-[13px] sm:text-sm leading-snug line-clamp-2 group-hover:text-brand-brick transition-colors">
+                          {book.title}
+                        </h3>
+                        <p className="text-[11px] sm:text-xs text-brand-navy/60 mt-0.5 truncate font-body">
+                          {author}
+                        </p>
+                      </div>
+                    </Link>
+
+                    {/* Price & Location Note Row */}
+                    <div className="mt-1">
+                      {book.price ? (
+                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                          <span className="font-body font-extrabold text-sm sm:text-base text-brand-navy">
+                            ₹{book.price}
+                          </span>
+                          {hasDiscount && (
+                            <span className="text-[11px] sm:text-xs text-brand-navy/40 line-through font-body">
+                              ₹{book.originalPrice}
+                            </span>
+                          )}
+                        </div>
+                      ) : null}
 
                       {note && (
-                        <p className="font-hand text-brand-brick/80 text-base mt-2 flex items-center gap-1">
-                          <MapPin size={13} className="shrink-0" strokeWidth={2} />
+                        <p className="font-hand text-brand-brick/90 text-xs sm:text-sm mt-0.5 flex items-center gap-1 truncate">
+                          <MapPin size={12} className="shrink-0" strokeWidth={2} />
                           {note}
                         </p>
                       )}
-
-                      <Link
-                        to={`/bookstore/book/${book.id}`}
-                        className="text-xs font-semibold text-brand-navy/70 mt-2 inline-flex items-center gap-1 hover:text-brand-brick transition-colors"
-                      >
-                        Read More <ArrowRight size={11} />
-                      </Link>
                     </div>
                   </div>
                 )
               })}
+          </div>
+
+          {/* Right Arrow Button */}
+          <button
+            onClick={() => scroll('right')}
+            aria-label="Scroll Right"
+            className="absolute -right-5 sm:-right-8 lg:-right-10 top-[36%] -translate-y-1/2 z-20 w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-brand-navy/15 bg-white text-brand-navy flex items-center justify-center shadow-md hover:bg-brand-navy hover:text-white transition-all active:scale-95"
+          >
+            <ChevronRight size={18} />
+          </button>
         </div>
       </div>
-
-      {/* mobile CTA, mirrors the desktop pill since it's hidden above on small screens */}
-      <Link
-        to={viewAllHref}
-        className="sm:hidden inline-flex items-center gap-1.5 bg-brand-brick text-white text-sm font-semibold px-5 py-2.5 rounded-full mt-2"
-      >
-        Meet the Authors <ArrowRight size={14} />
-      </Link>
     </section>
   )
 }

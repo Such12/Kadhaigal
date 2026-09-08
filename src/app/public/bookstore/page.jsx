@@ -25,7 +25,9 @@ export default function BookstorePage() {
   }, [activeQuery])
 
   useEffect(() => {
-    getStaffPicks().then(setStaffPicks)
+    getStaffPicks().then((data) => {
+      setStaffPicks(data.filter((b) => (b.genre || '').toLowerCase() !== "children's books"))
+    })
   }, [])
 
   useEffect(() => {
@@ -51,9 +53,9 @@ export default function BookstorePage() {
     setQuery(cleanValue)
 
     if (cleanValue) {
-      setSearchParams({ q: cleanValue })
+      setSearchParams({ q: cleanValue }, { replace: true })
     } else {
-      setSearchParams({})
+      setSearchParams({}, { replace: true })
     }
   }
 

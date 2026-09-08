@@ -49,7 +49,7 @@ const authors = [
 
 export default function AuthorsWeLove() {
   return (
-    <section className="container-page py-16 sm:py-20">
+    <section className="container-page py-8 sm:py-12">
       {/*
         Self-contained font import so this works as a single drop-in file.
         For better performance/caching, move this <link> into index.html
@@ -57,24 +57,20 @@ export default function AuthorsWeLove() {
       */}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');`}</style>
 
-      <div className="mb-10 max-w-md">
+      <div className="mb-10 max-w-2xl">
         <p className="text-xs font-semibold tracking-widest uppercase text-brand-brick mb-3">
           Authors We Love
         </p>
         <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy">
           Names Worth Knowing By Heart
         </h2>
-        <p className="text-brand-navy/60 mt-3">
-          No headshots — just the writers we can't stop putting in
-          people's hands.
-        </p>
       </div>
 
       <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
         {authors.map((author) => (
           <Link
             key={author.name}
-            to={`/bookstore/${author.bookId}`}
+            to={`/bookstore/search?q=${encodeURIComponent(author.name)}`}
             className="shrink-0 w-52 bg-[#EDE0C2] border border-brand-navy/25 rounded-sm px-5 py-5 relative shadow-[2px_2px_0_rgba(20,41,80,0.08)] hover:-translate-y-1 transition-transform duration-200"
             style={{ fontFamily: "'Special Elite', monospace" }}
           >

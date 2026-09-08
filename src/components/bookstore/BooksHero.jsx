@@ -3,12 +3,24 @@ import Button from '../ui/Button.jsx'
 import BookstoreNavbar from './BookstoreNavbar.jsx'
 import Pintoo from '../../assets/images/pintu sitting on books.svg'
 import border from '../../assets/images/border.svg'
+import heroImg from '../../assets/images/1000066070.jpg'
 
 export default function BooksHero({ query, onQueryChange }) {
   return (
     <>
       <BookstoreNavbar query={query} onQueryChange={onQueryChange} />
 
+      {/* ── NEW HERO SECTION WITH IMAGE (FULL WIDTH & TOP/BOTTOM CROPPED) ── */}
+      <section className="w-full overflow-hidden bg-[#c43d26]">
+        <img
+          src={heroImg}
+          alt="Kadhaigal - The Year of Quiet Reading"
+          className="w-full h-[180px] xs:h-[230px] sm:h-[310px] md:h-[390px] lg:h-[500px] object-cover object-center block"
+        />
+      </section>
+
+      {/*
+      // ── PREVIOUS HERO IMPLEMENTATION (COMMENTED OUT) ─────────────────────
       <section className="relative bg-brand-cream overflow-hidden">
         <div className="container-page pt-10 pb-14 sm:pt-14 sm:pb-20 lg:pb-32">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -39,12 +51,12 @@ export default function BooksHero({ query, onQueryChange }) {
           </div>
         </div>
 
-        {/* Border ornament */}
         <div
           className="hidden lg:block absolute left-0 right-0 bottom-0 h-8 bg-repeat-x bg-bottom bg-contain"
           style={{ backgroundImage: `url(${border})` }}
         />
       </section>
+      */}
     </>
   )
 }

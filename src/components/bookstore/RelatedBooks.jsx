@@ -16,7 +16,7 @@ export default function RelatedBooks({ books }) {
     <section className="mt-20">
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display font-bold text-2xl text-brand-navy flex items-center gap-2">
-          <span className="text-brand-brick">—</span> View More
+          View More
         </h2>
         <div className="flex gap-2">
           <button
@@ -43,7 +43,7 @@ export default function RelatedBooks({ books }) {
             to={`/bookstore/${book.id}`}
             className="w-40 sm:w-48 shrink-0"
           >
-            <div className="aspect-[2/3] rounded-lg shadow-card w-full overflow-hidden bg-brand-navy/[0.03]">
+            <div className="aspect-[2/3] shadow-card w-full overflow-hidden bg-brand-navy/[0.03]">
               {book.imageLinks?.thumbnail ? (
                 <img
                   src={book.imageLinks.thumbnail}

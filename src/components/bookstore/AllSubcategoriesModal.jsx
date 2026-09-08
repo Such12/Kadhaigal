@@ -143,7 +143,7 @@ export default function AllSubcategoriesModal({ categories, onClose }) {
         </button>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto flex-1 px-6 sm:px-10 lg:px-16 pt-16 sm:pt-20 pb-10 sm:pb-14">
+        <div className="overflow-y-auto custom-scrollbar flex-1 px-4 sm:px-8 lg:px-14 pt-16 sm:pt-20 pb-10 sm:pb-14">
           {/* Centered title */}
           <div className="text-center mb-10 sm:mb-14 max-w-lg mx-auto">
             <h2 className="font-display font-bold text-3xl sm:text-4xl text-brand-navy">Browse All</h2>

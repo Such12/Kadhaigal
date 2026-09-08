@@ -14,7 +14,7 @@ export default function Button({
     outline:
       'bg-transparent text-brand-navy underline underline-offset-4 decoration-brand-navy/40 hover:decoration-brand-brick hover:text-brand-brick px-2 py-3',
     dark: 'bg-brand-navy text-white hover:bg-[#0d1d3c]',
-    light: 'bg-white text-brand-navy hover:bg-brand-cream',
+    light: 'bg-white text-brand-navy hover:bg-brand-cream hover:-translate-y-0.5',
   }
 
   const Comp = as

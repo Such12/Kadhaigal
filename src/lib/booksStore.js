@@ -125,13 +125,35 @@ export async function removeFeaturedBook(id) {
 
 // ---- Full inventory ----
 
-export async function getBooks() {
-  const { data, error } = await supabase
-    .from('books')
-    .select('*')
-    .order('created_at', { ascending: false })
-  if (error) throw error
-  return data.map(rowToBook)
+let booksCache = null
+let booksCachePromise = null
+
+export function clearBooksCache() {
+  booksCache = null
+  booksCachePromise = null
+}
+
+export async function getBooks(forceRefresh = false) {
+  if (!forceRefresh && booksCache) {
+    return booksCache
+  }
+  if (!forceRefresh && booksCachePromise) {
+    return booksCachePromise
+  }
+  booksCachePromise = (async () => {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (error) {
+      booksCachePromise = null
+      throw error
+    }
+    booksCache = data.map(rowToBook)
+    booksCachePromise = null
+    return booksCache
+  })()
+  return booksCachePromise
 }
 
 export async function getBookById(id) {
@@ -177,12 +199,14 @@ export async function getLocalShelfBooks() {
 }
 
 export async function addBook(book) {
+  clearBooksCache()
   const { data, error } = await supabase.from('books').insert(bookToRow(book)).select().single()
   if (error) throw error
   return rowToBook(data)
 }
 
 export async function updateBook(id, updates) {
+  clearBooksCache()
   const { data, error } = await supabase
     .from('books')
     .update(bookToRow(updates))
@@ -194,6 +218,7 @@ export async function updateBook(id, updates) {
 }
 
 export async function deleteBook(id) {
+  clearBooksCache()
   const { error } = await supabase.from('books').delete().eq('id', id)
   if (error) throw error
 }

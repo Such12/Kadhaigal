@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useNavigate, Link } from 'react-router-dom'
-import { X, ShoppingBag, User, Search } from 'lucide-react'
+import { X, ShoppingBag, User, Search, BookOpen } from 'lucide-react'
 import { categories } from '../../data/categories.js'
 import { getBooks } from '../../lib/booksStore.js'
 
@@ -15,51 +15,38 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [localQuery, setLocalQuery] = useState('')
-  const [suggestions, setSuggestions] = useState([])
+  const [allBooks, setAllBooks] = useState([])
   const inputRef = useRef(null)
   const navigate = useNavigate()
 
   const isControlled = typeof onQueryChange === 'function'
-  const inputValue = isControlled ? query : localQuery
+  const inputValue = localQuery
+
+  // Pre-fetch/load books for instant local filtering
+  useEffect(() => {
+    let active = true
+    getBooks().then((books) => {
+      if (active) setAllBooks(books)
+    })
+    return () => { active = false }
+  }, [searchOpen])
+
+  useEffect(() => {
+    if (searchOpen) {
+      setLocalQuery('')
+    }
+  }, [searchOpen])
 
   const visibleSuggestions = useMemo(() => {
     const q = (inputValue || '').trim().toLowerCase()
     if (!q) return []
-    return suggestions.filter((book) => {
+    return allBooks.filter((book) => {
       const title = (book.title || '').toLowerCase()
       const author = (book.author || '').toLowerCase()
       const genre = (book.genre || '').toLowerCase()
       return title.includes(q) || author.includes(q) || genre.includes(q)
     }).slice(0, 6)
-  }, [inputValue, suggestions])
-
-  useEffect(() => {
-    if (!searchOpen) {
-      setSuggestions([])
-      return
-    }
-
-    const trimmed = (inputValue || '').trim()
-    if (!trimmed) {
-      setSuggestions([])
-      return
-    }
-
-    let active = true
-    getBooks().then((books) => {
-      if (!active) return
-      const q = trimmed.toLowerCase()
-      const next = books.filter((book) => {
-        const title = (book.title || '').toLowerCase()
-        const author = (book.author || '').toLowerCase()
-        const genre = (book.genre || '').toLowerCase()
-        return title.includes(q) || author.includes(q) || genre.includes(q)
-      }).slice(0, 6)
-      setSuggestions(next)
-    })
-
-    return () => { active = false }
-  }, [inputValue, searchOpen])
+  }, [inputValue, allBooks])
 
   // Auto-focus input when overlay opens
   useEffect(() => {
@@ -82,26 +69,20 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
   }, [])
 
   function handleChange(e) {
-    const value = e.target.value
-    if (isControlled) {
-      onQueryChange(value)
-    } else {
-      setLocalQuery(value)
-    }
+    setLocalQuery(e.target.value)
   }
 
   function handleSearchSubmit(value) {
     const term = (value || '').trim()
     if (!term) return
 
+    setLocalQuery('')
     if (isControlled) {
-      onQueryChange(term)
-    } else {
-      setLocalQuery(term)
+      onQueryChange('')
     }
 
-    navigate(`/bookstore/search?q=${encodeURIComponent(term)}`)
     setSearchOpen(false)
+    navigate(`/bookstore/search?q=${encodeURIComponent(term)}`)
   }
 
   function handleKeyDown(e) {
@@ -111,9 +92,19 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
   }
 
   function handleSuggestionClick(book) {
-    const term = book.title || book.author || book.genre || ''
-    if (!term) return
-    handleSearchSubmit(term)
+    setLocalQuery('')
+    if (isControlled) {
+      onQueryChange('')
+    }
+    setSearchOpen(false)
+
+    if (book && book.id) {
+      navigate(`/bookstore/${book.id}`)
+    } else {
+      const term = book?.title || book?.author || book?.genre || ''
+      if (!term) return
+      navigate(`/bookstore/search?q=${encodeURIComponent(term)}`)
+    }
   }
 
   function handleCategoryClick() {
@@ -158,9 +149,8 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
 
       {/* ── Full-screen search overlay ── */}
       <div
-        className={`fixed inset-0 z-50 bg-brand-cream transition-opacity duration-300 ${
-          searchOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 z-50 bg-brand-cream transition-opacity duration-300 ${searchOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
       >
         <div className="h-full overflow-y-auto">
           <div className="container-page max-w-4xl py-10 sm:py-14">
@@ -191,7 +181,10 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
               />
               {inputValue ? (
                 <button
-                  onClick={() => isControlled ? onQueryChange('') : setLocalQuery('')}
+                  onClick={() => {
+                    setLocalQuery('')
+                    if (isControlled) onQueryChange('')
+                  }}
                   className="absolute right-0 top-1/2 -translate-y-1/2 text-brand-navy/40 hover:text-brand-brick transition-colors"
                   aria-label="Clear"
                 >
@@ -210,14 +203,27 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
                     key={book.id}
                     type="button"
                     onClick={() => handleSuggestionClick(book)}
-                    className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-brand-cream"
+                    className="w-full flex items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-brand-cream border-b border-brand-navy/5 last:border-0"
                   >
-                    <div>
-                      <p className="text-brand-navy font-medium">{book.title}</p>
-                      <p className="text-sm text-brand-navy/60">{book.author || book.genre || 'Book'}</p>
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-10 h-14 shrink-0 overflow-hidden bg-brand-navy/5 border border-brand-navy/10 flex items-center justify-center">
+                        {book.imageLinks?.thumbnail || book.imageLinks?.smallThumbnail ? (
+                          <img
+                            src={book.imageLinks.thumbnail || book.imageLinks.smallThumbnail}
+                            alt={book.title}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <BookOpen size={18} className="text-brand-navy/30" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-brand-navy font-medium text-sm sm:text-base truncate">{book.title}</p>
+                        <p className="text-xs sm:text-sm text-brand-navy/60 truncate mt-0.5">{book.author || book.genre || 'Book'}</p>
+                      </div>
                     </div>
                     {book.price ? (
-                      <span className="text-sm text-brand-brick font-semibold">₹{book.price}</span>
+                      <span className="text-sm text-brand-brick font-semibold shrink-0">₹{book.price}</span>
                     ) : null}
                   </button>
                 ))}
@@ -264,9 +270,8 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
 
       {/* ── Slide-out nav drawer ── */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-72 bg-brand-cream shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-          drawerOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 z-50 h-full w-72 bg-brand-cream shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${drawerOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="flex items-center justify-between px-6 py-5 border-b border-brand-navy/10">
           <img src="/logo.svg" alt="Kadhaigal" className="h-8 w-auto" />
@@ -288,8 +293,7 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
                   end={link.end}
                   onClick={() => setDrawerOpen(false)}
                   className={({ isActive }) =>
-                    `font-display font-bold text-xl transition-colors hover:text-brand-brick ${
-                      isActive ? 'text-brand-brick' : 'text-brand-navy'
+                    `font-display font-bold text-xl transition-colors hover:text-brand-brick ${isActive ? 'text-brand-brick' : 'text-brand-navy'
                     }`
                   }
                 >
