@@ -19,6 +19,7 @@ export default {
         head: ['"TAN St. Canard"', 'ui-serif', 'Georgia', 'serif'],
         body: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         hand: ['"Caveat"', 'cursive'],
+        comic: ['"Bangers"', '"Luckiest Guy"', 'impact', 'cursive'],
       },
       boxShadow: {
         polaroid: '0 20px 40px -10px rgba(20, 41, 80, 0.35)',

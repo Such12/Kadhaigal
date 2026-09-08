@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ShoppingCart } from 'lucide-react'
 import { getBooksByGenre } from '../../lib/booksStore'
 import { genreCategories } from '../../data/genreCategories'
 
-const CARD_WIDTH = 188 // px, keep in sync with w-[188px]
+const CARD_WIDTH = 175 // px, matching What's Trending w-[155px] sm:w-[175px]
 const CARD_GAP = 20 // px, keep in sync with gap-5
 const MAX_BOOKS = 10
 //const VISIBLE_COUNT = 5 // Maximum categories visible at once on the left rail
@@ -41,34 +42,38 @@ function BookCover({ book, index }) {
 
   if (thumbnail) {
     return (
-      <div className="h-64 overflow-hidden rounded-sm bg-brand-navy/5 shadow-polaroid">
-        <img
-          src={thumbnail}
-          alt={`Cover of ${book.title}`}
-          loading="lazy"
-          className="h-full w-full object-cover"
-        />
-      </div>
+      <Link to={book.id ? `/bookstore/${book.id}` : '#'} className="block relative">
+        <div className="aspect-[2/3] w-full overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1 relative bg-brand-navy/[0.04]">
+          <img
+            src={thumbnail}
+            alt={`Cover of ${book.title}`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        </div>
+      </Link>
     )
   }
 
   const spine = SPINES[index % SPINES.length]
   return (
-    <div
-      className="relative flex h-64 items-end overflow-hidden rounded-sm p-4 shadow-polaroid"
-      style={{ backgroundColor: spine.bg }}
-    >
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-2 -top-3 select-none font-display text-8xl opacity-15"
-        style={{ color: spine.fg }}
+    <Link to={book.id ? `/bookstore/${book.id}` : '#'} className="block relative">
+      <div
+        className="relative flex aspect-[2/3] w-full items-end overflow-hidden p-3.5 shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1"
+        style={{ backgroundColor: spine.bg }}
       >
-        {book.title?.charAt(0) ?? '?'}
-      </span>
-      <p className="relative font-display text-[0.95rem] leading-snug" style={{ color: spine.fg }}>
-        {book.title}
-      </p>
-    </div>
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 -top-3 select-none font-display text-7xl opacity-15"
+          style={{ color: spine.fg }}
+        >
+          {book.title?.charAt(0) ?? '?'}
+        </span>
+        <p className="relative font-display text-xs leading-snug line-clamp-3" style={{ color: spine.fg }}>
+          {book.title}
+        </p>
+      </div>
+    </Link>
   )
 }
 
@@ -77,50 +82,62 @@ function BookCard({ book, index }) {
   const off = hasDiscount ? Math.round(book.originalPrice - book.price) : null
 
   return (
-    <article className="flex w-[188px] shrink-0 snap-start flex-col gap-3">
+    <article className="group flex w-[155px] sm:w-[175px] shrink-0 snap-start flex-col gap-2.5">
       <BookCover book={book} index={index} />
       <div className="flex flex-col gap-1">
-        <h3 className="line-clamp-2 font-body text-sm font-semibold text-brand-navy">
-          {book.title}
-        </h3>
+        <Link to={book.id ? `/bookstore/${book.id}` : '#'}>
+          <h3 className="line-clamp-2 min-h-[2.5rem] font-body text-sm font-semibold text-brand-navy transition-colors group-hover:text-brand-brick">
+            {book.title}
+          </h3>
+        </Link>
         <p className="line-clamp-1 font-body text-xs text-brand-navy/55">{book.author}</p>
-        {book.price != null && (
-          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-            {hasDiscount && (
-              <span className="font-body text-xs text-brand-navy/35 line-through">
-                ₹{book.originalPrice}
-              </span>
-            )}
-            <span className="font-body text-sm font-bold text-brand-navy">₹{book.price}</span>
-            {hasDiscount && (
-              <span className="rounded-full bg-brand-sage/30 px-2 py-0.5 font-body text-[0.65rem] font-medium text-brand-navy/80">
-                ₹{off} Off
-              </span>
-            )}
-          </div>
-        )}
+        <div className="mt-1 flex items-center justify-between gap-1.5">
+          {book.price != null ? (
+            <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">
+              <span className="font-body text-sm font-bold text-brand-navy">₹{book.price}</span>
+              {hasDiscount && (
+                <span className="font-body text-xs text-brand-navy/35 line-through">
+                  ₹{book.originalPrice}
+                </span>
+              )}
+              {hasDiscount && (
+                <span className="rounded-full bg-brand-sage/30 px-1.5 py-0.5 font-body text-[0.65rem] font-medium text-brand-navy/80">
+                  ₹{off} Off
+                </span>
+              )}
+            </div>
+          ) : (
+            <div />
+          )}
+          <button
+            type="button"
+            aria-label={`Add ${book.title} to cart`}
+            title="Add to Cart"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-brick text-brand-cream transition-all duration-200 hover:bg-brand-brick/90 hover:scale-105 active:scale-95 shadow-sm"
+          >
+            <ShoppingCart size={15} />
+          </button>
+        </div>
       </div>
-      <button
-        type="button"
-        className="mt-1 rounded-full bg-brand-brick py-2 font-body text-xs font-semibold text-brand-cream transition-colors hover:bg-brand-brick/90"
-      >
-        Add to Cart
-      </button>
     </article>
   )
 }
 
 function ShowMoreCard({ slug, label }) {
   return (
-    <Link
-      to={`/bookstore/genre/${slug}`}
-      className="group flex h-64 w-[188px] shrink-0 snap-start flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-brand-navy/25 px-4 text-center text-brand-navy transition-colors hover:border-brand-brick hover:text-brand-brick"
-    >
-      <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-current">
-        <ChevronIcon direction="right" />
-      </span>
-      <span className="font-body text-sm font-semibold">Browse all {label}</span>
-    </Link>
+    <div className="flex w-[155px] sm:w-[175px] shrink-0 snap-start flex-col gap-2.5">
+      <Link
+        to={`/bookstore/genre/${slug}`}
+        className="group flex aspect-[2/3] w-full flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-brand-navy/25 p-4 text-center text-brand-navy transition-all duration-300 hover:border-brand-brick hover:text-brand-brick hover:-translate-y-1 shadow-md hover:shadow-xl bg-white/25"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 border-current transition-transform duration-300 group-hover:scale-110">
+          <ChevronIcon direction="right" />
+        </span>
+        <span className="font-body text-xs sm:text-sm font-semibold leading-snug">
+          Browse all {label}
+        </span>
+      </Link>
+    </div>
   )
 }
 
@@ -128,10 +145,10 @@ function ShelfSkeleton() {
   return (
     <div className="flex gap-5">
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="flex w-[188px] shrink-0 flex-col gap-3">
-          <div className="h-64 animate-pulse rounded-sm bg-brand-navy/10" />
-          <div className="h-4 w-4/5 animate-pulse rounded bg-brand-navy/10" />
-          <div className="h-3 w-3/5 animate-pulse rounded bg-brand-navy/10" />
+        <div key={i} className="flex w-[155px] sm:w-[175px] shrink-0 flex-col gap-3 animate-pulse">
+          <div className="aspect-[2/3] w-full rounded bg-brand-navy/10" />
+          <div className="h-4 w-4/5 rounded bg-brand-navy/10" />
+          <div className="h-3 w-3/5 rounded bg-brand-navy/10" />
         </div>
       ))}
     </div>
@@ -217,10 +234,15 @@ export default function BrowseByGenre() {
         className="mx-auto max-w-7xl rounded-3xl  md:p-12 transition-colors duration-500 ease-in-out shadow-sm"
         style={{ backgroundColor: activeCategory.bgColor || '#BBF0B1' }}
       >
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[300px_1fr] lg:gap-14">
-          
-          {/* Genre rail - Dynamic 5 items visible window */}
-          <nav aria-label="Browse by genre" className=" flex flex-col justify-center gap-2 lg:h-[360px]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[340px_1fr] lg:gap-14">
+
+          {/* Genre rail - Dynamic 5 items visible window.
+              Labels are truncated to a single line (never wrap) so every
+              row is the same height by construction — no stretch tricks
+              or min-height coordination with the shelf column needed.
+              grid-rows-5 still divides the rail evenly across whatever
+              total height it ends up with. */}
+          <nav aria-label="Browse by genre" className="grid grid-rows-5">
             {visibleCategories.map((category) => {
               const isActive = category.slug === activeSlug
               return (
@@ -229,20 +251,23 @@ export default function BrowseByGenre() {
                   type="button"
                   onClick={() => setActiveSlug(category.slug)}
                   aria-pressed={isActive}
-                  className={`text-left font-display leading-[1.15] transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2  ${
+                  title={category.label}
+                  className={`flex min-w-0 items-center text-left font-display transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 ${
                     isActive
                       ? 'text-4xl font-bold text-brand-navy md:text-[2.75rem] scale-100 translate-x-1'
                       : 'text-3xl text-brand-navy/25 hover:text-brand-navy/50 md:text-4xl scale-95 origin-left'
                   }`}
                 >
-                  {category.label}
+                  <span className="min-w-0 truncate">{category.label}</span>
                 </button>
               )
             })}
           </nav>
 
-          {/* Shelf */}
-          <div className="min-w-0">
+          {/* Shelf - min-h keeps the section's height stable across
+              skeleton / empty / loaded states, so switching genres never
+              causes the row (and therefore the nav rail) to jump in size. */}
+          <div className="min-w-0 lg:min-h-[360px]">
             <div className="mb-6 flex items-end justify-between gap-4">
               <div>
                 <h2 className="font-display text-2xl text-brand-navy">{activeCategory.label}</h2>

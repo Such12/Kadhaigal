@@ -150,9 +150,9 @@ export default function ChildrensBooksSection() {
         {/* Header with Title & View All on right */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <h2 className="font-display font-bold text-3xl sm:text-4xl lg:text-5xl text-brand-navy tracking-tight">
-              Children's Books
-            </h2>
+            <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-4xl text-brand-navy tracking-tight">
+  Children's Books
+</h2>
           </div>
 
           <Link

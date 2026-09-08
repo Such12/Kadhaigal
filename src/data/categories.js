@@ -13,9 +13,9 @@ export const allCategories = [
     description: 'Where narrative depth meets human truth. Explore stories that linger long after the final page is turned.',
   },
   {
-    name: 'Sci-Fic',
-    slug: 'sci-fic',
-    tags: ['Hard Sci fic', 'Dystopian', 'Cyberpunk'],
+    name: 'Sci-Fi',
+    slug: 'sci-fi',
+    tags: ['Hard Sci-fi', 'Dystopian', 'Cyberpunk'],
     description: 'Worlds beyond our own — distant galaxies, and futures both feared and hoped for.',
   },
   {

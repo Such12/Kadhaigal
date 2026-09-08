@@ -7,7 +7,7 @@ export default function JoinCommunity() {
       <div className="absolute inset-0 opacity-[0.06]" />
 
       <div className="container-page py-16 sm:py-20 text-center relative">
-        <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">
+        <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-cream">
           Join the Community
         </h2>
         <p className="text-white/60 mt-3 max-w-xl mx-auto">

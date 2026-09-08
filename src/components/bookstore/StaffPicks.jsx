@@ -239,9 +239,6 @@ export default function StaffPicks({ books }) {
 
   return (
     <section id="staff-picks" className="container-page pt-6 sm:pt-10 pb-20 sm:pb-28">
-      <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-brand-navy mb-8">
-        Staff Picks
-      </h2>
 
       {/*
         Desktop: 3 columns — [Review 35%] | [Centre book 30%] | [Thumbs 35%]

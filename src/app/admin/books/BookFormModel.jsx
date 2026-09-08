@@ -7,7 +7,9 @@ import { allCategories } from '../../../data/categories.js'
 const GENRES = allCategories.map(c => c.name)
 
 function splitList(str) {
-  return str
+  if (!str) return []
+  if (Array.isArray(str)) return str
+  return String(str)
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
@@ -23,6 +25,7 @@ function emptyForm() {
     description: '',
     isbn: '',
     pageCount: '',
+    categories: '',
     allCategories: '',
     language: 'en',
     thumbnail: '',
@@ -66,9 +69,10 @@ function bookToForm(book) {
     publisher: book.publisher ?? '',
     publishedDate: book.publishedDate ?? '',
     description: book.description ?? '',
-    isbn: book.industryIdentifiers?.[0]?.identifier ?? '',
+    isbn: book.industryIdentifiers?.[0]?.identifier ?? book.isbn ?? '',
     pageCount: book.pageCount ?? '',
-    allCategories: (book.allCategories ?? []).join(', '),
+    categories: (book.categories ?? book.allCategories ?? []).join(', '),
+    allCategories: (book.allCategories ?? book.categories ?? []).join(', '),
     language: book.language ?? 'en',
     thumbnail: book.imageLinks?.thumbnail ?? '',
     smallThumbnail: book.imageLinks?.smallThumbnail ?? '',
@@ -103,50 +107,51 @@ function bookToForm(book) {
 }
 
 function formToBook(form) {
-  const isbn = form.isbn.trim()
+  const isbn = (form.isbn ?? '').trim()
   return {
     // Google Books fields
-    title: form.title.trim(),
+    title: (form.title ?? '').trim(),
     authors: splitList(form.authors),
-    publisher: form.publisher.trim(),
-    publishedDate: form.publishedDate.trim(),
-    description: form.description.trim(),
+    publisher: (form.publisher ?? '').trim(),
+    publishedDate: (form.publishedDate ?? '').trim(),
+    description: (form.description ?? '').trim(),
+    isbn: isbn || undefined,
     industryIdentifiers: isbn
       ? [{ type: isbn.length === 10 ? 'ISBN_10' : 'ISBN_13', identifier: isbn }]
       : [],
     pageCount: form.pageCount ? Number(form.pageCount) : null,
-    categories: splitList(form.categories),
+    categories: splitList(form.categories || form.allCategories),
     averageRating: form.averageRating ? Number(form.averageRating) : null,
     ratingsCount: form.ratingsCount ? Number(form.ratingsCount) : null,
     imageLinks: {
-      thumbnail: form.thumbnail.trim(),
-      smallThumbnail: form.smallThumbnail.trim() || form.thumbnail.trim(),
+      thumbnail: (form.thumbnail ?? '').trim(),
+      smallThumbnail: (form.smallThumbnail ?? form.thumbnail ?? '').trim(),
     },
-    language: form.language.trim() || 'en',
-    previewLink: form.previewLink.trim(),
-    infoLink: form.infoLink.trim(),
-    maturityRating: form.maturityRating,
+    language: (form.language ?? 'en').trim() || 'en',
+    previewLink: (form.previewLink ?? '').trim(),
+    infoLink: (form.infoLink ?? '').trim(),
+    maturityRating: form.maturityRating || 'NOT_MATURE',
     // Store-specific fields
-    genre: form.genre.trim(),
-    subGenre: form.subGenre.trim() || undefined,
+    genre: (form.genre ?? '').trim(),
+    subGenre: (form.subGenre ?? '').trim() || undefined,
     price: form.price ? Number(form.price) : 0,
     quantity: form.quantity ? Number(form.quantity) : 0,
     originalPrice: form.originalPrice ? Number(form.originalPrice) : undefined,
-    badge: form.badge.trim() || undefined,
+    badge: (form.badge ?? '').trim() || undefined,
     rating: form.rating ? Number(form.rating) : undefined,
     mood: form.mood ? splitList(form.mood) : undefined,
     isStaffPick: form.isStaffPick,
     staffNote: form.isStaffPick
-      ? { by: form.staffBy.trim(), role: form.staffRole.trim(), quote: form.staffQuote.trim(), body: form.staffBody.trim() }
+      ? { by: (form.staffBy ?? '').trim(), role: (form.staffRole ?? '').trim(), quote: (form.staffQuote ?? '').trim(), body: (form.staffBody ?? '').trim() }
       : undefined,
     curatorNote: form.hasCuratorNote
-      ? { recommendedBy: form.curatorBy.trim(), quote: form.curatorQuote.trim(), body: form.curatorBody.trim() }
+      ? { recommendedBy: (form.curatorBy ?? '').trim(), quote: (form.curatorQuote ?? '').trim(), body: (form.curatorBody ?? '').trim() }
       : undefined,
     isSelfPublished: form.isSelfPublished,
-    printLocation: form.isSelfPublished ? form.printLocation.trim() : undefined,
-    printNote: form.isSelfPublished ? form.printNote.trim() : undefined,
+    printLocation: form.isSelfPublished ? (form.printLocation ?? '').trim() : undefined,
+    printNote: form.isSelfPublished ? (form.printNote ?? '').trim() : undefined,
     isUsed: form.isUsed,
-    conditionNote: form.isUsed ? form.conditionNote.trim() : undefined,
+    conditionNote: form.isUsed ? (form.conditionNote ?? '').trim() : undefined,
   }
 }
 

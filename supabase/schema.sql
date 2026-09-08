@@ -134,3 +134,113 @@ create policy "Admins can delete events" on events for delete using (auth.uid() 
 
 -- Admin users
 create policy "Admins can read admin_users" on admin_users for select using (auth.uid() in (select user_id from admin_users));
+
+
+
+
+
+
+
+
+-- A SECURITY DEFINER function runs with the privileges of whoever created
+-- it (not the querying user), so its internal query bypasses RLS entirely
+-- — breaking the recursion, since it no longer triggers admin_users'
+-- own policy while checking admin_users.
+create or replace function is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select exists (
+    select 1 from admin_users where user_id = auth.uid()
+  );
+$$;
+
+grant execute on function is_admin() to authenticated, anon;
+
+-- Replace every policy that referenced admin_users directly with is_admin()
+
+-- books
+drop policy "Admins can insert books" on books;
+drop policy "Admins can update books" on books;
+drop policy "Admins can delete books" on books;
+create policy "Admins can insert books" on books for insert with check (is_admin());
+create policy "Admins can update books" on books for update using (is_admin());
+create policy "Admins can delete books" on books for delete using (is_admin());
+
+-- featured_books
+drop policy "Admins can insert featured_books" on featured_books;
+drop policy "Admins can delete featured_books" on featured_books;
+create policy "Admins can insert featured_books" on featured_books for insert with check (is_admin());
+create policy "Admins can delete featured_books" on featured_books for delete using (is_admin());
+
+-- events
+drop policy "Admins can read all events" on events;
+drop policy "Admins can insert events" on events;
+drop policy "Admins can update events" on events;
+drop policy "Admins can delete events" on events;
+create policy "Admins can read all events" on events for select using (is_admin());
+create policy "Admins can insert events" on events for insert with check (is_admin());
+create policy "Admins can update events" on events for update using (is_admin());
+create policy "Admins can delete events" on events for delete using (is_admin());
+
+-- admin_users itself — this was the one directly causing the recursion
+drop policy "Admins can read admin_users" on admin_users;
+create policy "Admins can read admin_users" on admin_users for select using (is_admin());
+
+
+insert into admin_users (user_id) values ('8bc8cad8-d4aa-49f9-8fc3-0baa02a54d23');
+insert into admin_users (user_id) values ('ef011a99-0f9b-4b6d-92eb-ba9f1ba9c263');
+
+drop table if exists events cascade;
+
+create table events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text,
+  event_date date not null,
+  start_time time,
+  end_time time,
+  accent text default 'navy',         -- 'navy' | 'brick' | 'sage' — sticky-note color on the noticeboard
+  category text,                       -- e.g. 'Workshop', 'Reading', 'Open Mic' — for the /events page
+  is_featured boolean default false,   -- shows in the Featured Events section on /events
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create index idx_events_event_date on events (event_date);
+create index idx_events_is_featured on events (is_featured) where is_featured = true;
+
+alter table events enable row level security;
+
+create policy "Public can read events" on events for select using (true);
+create policy "Admins can insert events" on events for insert with check (is_admin());
+create policy "Admins can update events" on events for update using (is_admin());
+create policy "Admins can delete events" on events for delete using (is_admin());
+
+alter table events
+  add column if not exists image_url text,
+  add column if not exists price numeric;
+
+
+alter table events
+  add column if not exists schedule_label text;
+
+
+insert into storage.buckets (id, name, public)
+values ('event-images', 'event-images', true)
+on conflict (id) do nothing;
+
+create policy "Public can view event images"
+  on storage.objects for select using (bucket_id = 'event-images');
+
+create policy "Admins can upload event images"
+  on storage.objects for insert with check (bucket_id = 'event-images' and is_admin());
+
+create policy "Admins can update event images"
+  on storage.objects for update using (bucket_id = 'event-images' and is_admin());
+
+create policy "Admins can delete event images"
+  on storage.objects for delete using (bucket_id = 'event-images' and is_admin());

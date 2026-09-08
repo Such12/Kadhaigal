@@ -28,24 +28,21 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-brand-navy border-t border-white/10">
+    <footer className="bg-brand-navy border-t border-brand-cream/10 text-brand-cream">
       {/* Main Footer Content */}
       <div className="container-page py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-4 ">
           {/* Logo and Socials */}
           <div className="lg:col-span-1">
             <Logo dark src="/footer-logo.svg" alt="Kadhaigal footer logo" />
-            <p className="text-xs text-white/60 mt-4 mb-6">
-              Bookstore · Community Space · Café
-            </p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 mt-6">
               {socials.map((social) => (
                 <a
                   key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white/60 hover:text-brand-brick transition-colors"
+                  className="text-brand-brick hover:text-brand-cream transition-colors"
                   title={social.name}
                 >
                   <social.Icon size={20} />
@@ -56,13 +53,13 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Quick Links</h3>
+            <h3 className="text-sm font-semibold text-brand-cream mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-xs text-white/60 hover:text-white transition-colors"
+                    className="text-xs text-brand-cream hover:text-brand-brick transition-colors"
                   >
                     {link.label}
                   </a>
@@ -73,13 +70,13 @@ export default function Footer() {
 
           {/* Policies */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Policies</h3>
+            <h3 className="text-sm font-semibold text-brand-cream mb-4">Policies</h3>
             <ul className="space-y-2">
               {policies.map((policy) => (
                 <li key={policy.href}>
                   <a
                     href={policy.href}
-                    className="text-xs text-white/60 hover:text-white transition-colors"
+                    className="text-xs text-brand-cream hover:text-brand-brick transition-colors"
                   >
                     {policy.label}
                   </a>
@@ -90,15 +87,15 @@ export default function Footer() {
 
           {/* Store Timings */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Store Timings</h3>
-            <div className="text-xs text-white/60 space-y-3">
+            <h3 className="text-sm font-semibold text-brand-cream mb-4">Store Timings</h3>
+            <div className="text-xs text-brand-cream space-y-3">
               {storeTimings.map((timing, idx) => (
                 <div key={idx}>
-                  <p className={timing.isClosed ? 'text-brand-brick font-semibold' : ''}>
+                  <p className={timing.isClosed ? 'text-brand-brick font-semibold' : 'text-brand-cream'}>
                     {timing.days}
                   </p>
                   {timing.hours && (
-                    <p className="font-semibold text-white">{timing.hours}</p>
+                    <p className="font-semibold text-brand-cream">{timing.hours}</p>
                   )}
                 </div>
               ))}
@@ -107,10 +104,10 @@ export default function Footer() {
 
           {/* Visit Us */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Visit Us</h3>
-            <div className="text-xs text-white/60 space-y-2">
-              <p className="font-semibold text-white">Kadhaigal Bookstore</p>
-              <p className="text-white/80">
+            <h3 className="text-sm font-semibold text-brand-cream mb-4">Visit Us</h3>
+            <div className="text-xs text-brand-cream space-y-2">
+              <p className="font-semibold text-brand-cream">Kadhaigal Bookstore</p>
+              <p className="text-brand-cream">
                 Ground Floor, Plot No. 547/16<br />
                 A Block, Sahakar Nagar<br />
                 Bengaluru, Karnataka 560092
@@ -118,7 +115,7 @@ export default function Footer() {
               <p className="mt-4">
                 <a
                   href="tel:+91-your-number"
-                  className="text-white/80 hover:text-white transition-colors"
+                  className="text-brand-cream hover:text-brand-brick transition-colors"
                 >
                   Phone: +91-XXX-XXX-XXXX
                 </a>
@@ -126,7 +123,7 @@ export default function Footer() {
               <p>
                 <a
                   href="mailto:contact@kadhaigal.com"
-                  className="text-white/80 hover:text-white transition-colors"
+                  className="text-brand-cream hover:text-brand-brick transition-colors"
                 >
                   Email: contact@kadhaigal.com
                 </a>
