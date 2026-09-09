@@ -3,7 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { ShoppingBag, User, Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 
-const links = [
+const allLinks = [
+  { label: 'Home', href: '/', end: true },
   { label: 'Books', href: '/bookstore', end: true },
   { label: "Children's Books", href: '/bookstore/kids' },
   { label: 'Events', href: '/events' },
@@ -16,6 +17,9 @@ export default function Navbar() {
 
   // Bookstore pages have their own BookstoreNavbar
   if (pathname.startsWith('/bookstore')) return null
+
+  const isHome = pathname === '/'
+  const links = isHome ? allLinks.slice(1) : allLinks
 
   return (
     <header className="sticky top-0 z-50 bg-brand-cream/95 backdrop-blur border-b border-brand-navy/5">

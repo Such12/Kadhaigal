@@ -244,3 +244,7 @@ create policy "Admins can update event images"
 
 create policy "Admins can delete event images"
   on storage.objects for delete using (bucket_id = 'event-images' and is_admin());
+
+alter table books
+  drop column if exists curator_note,
+  add column if not exists binding text;

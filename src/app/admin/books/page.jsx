@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Plus, Pencil, Trash2, Search, BookOpen } from 'lucide-react'
-import { getBooks, addBook, updateBook, deleteBook } from '../../../lib/booksStore.js'
+import { Plus, Pencil, Trash2, Search, BookOpen, Star } from 'lucide-react'
+import { getBooks, addBook, updateBook, deleteBook, setKaboomBook } from '../../../lib/booksStore.js'
 import BookFormModal from './BookFormModel.jsx'
 import { useToast, ToastContainer } from '../../../components/ui/Toast.jsx'
 
@@ -11,6 +11,7 @@ export default function AdminBooksPage() {
   const [search, setSearch] = useState('')
   const [modal, setModal] = useState(null) // { mode: 'add' | 'edit', book?: object }
   const [deletingId, setDeletingId] = useState(null)
+  const [settingKaboomId, setSettingKaboomId] = useState(null)
   const [saving, setSaving] = useState(false)
   const { toasts, push: pushToast, dismiss } = useToast()
 
@@ -67,6 +68,26 @@ export default function AdminBooksPage() {
     pushToast(book ? `"${book.title}" removed from the catalogue.` : 'Book removed.', 'error')
   }
 
+  async function handleToggleKaboom(book) {
+    if (settingKaboomId) return
+    setSettingKaboomId(book.id)
+    const isCurrent = !!book.isFeaturedSelection
+    try {
+      if (isCurrent) {
+        await setKaboomBook(null, false)
+        pushToast(`"${book.title}" removed from KABOOM! selection.`)
+      } else {
+        await setKaboomBook(book.id, true)
+        pushToast(`"${book.title}" set as KABOOM! Book of the Month.`)
+      }
+      await refresh()
+    } catch (err) {
+      pushToast(err.message || 'Could not update KABOOM book.', 'error')
+    } finally {
+      setSettingKaboomId(null)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-brand-cream/40 p-6 sm:p-10">
       <div className="max-w-6xl mx-auto">
@@ -109,19 +130,20 @@ export default function AdminBooksPage() {
                 <th className="px-4 py-3 font-semibold text-brand-navy/70">Genre</th>
                 <th className="px-4 py-3 font-semibold text-brand-navy/70">Price</th>
                 <th className="px-4 py-3 font-semibold text-brand-navy/70">Tags</th>
+                <th className="px-4 py-3 font-semibold text-brand-navy/70 text-center">KABOOM!</th>
                 <th className="px-4 py-3 font-semibold text-brand-navy/70 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-brand-navy/50">
+                  <td colSpan={6} className="px-4 py-10 text-center text-brand-navy/50">
                     Loading books…
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-10 text-center text-brand-navy/50">
+                  <td colSpan={6} className="px-4 py-10 text-center text-brand-navy/50">
                     No books found.
                   </td>
                 </tr>
@@ -160,10 +182,39 @@ export default function AdminBooksPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
+                        {book.isFeaturedSelection && (
+                          <Tag
+                            label="★ KABOOM"
+                            className="bg-brand-brick/15 text-brand-brick font-bold border border-brand-brick/25"
+                          />
+                        )}
                         {book.isStaffPick && <Tag label="Staff Pick" />}
                         {book.isSelfPublished && <Tag label="Self-Published" />}
                         {book.isUsed && <Tag label="Pre-loved" />}
                       </div>
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleKaboom(book)}
+                        disabled={settingKaboomId === book.id}
+                        title={
+                          book.isFeaturedSelection
+                            ? 'Current KABOOM! Book (click to unset)'
+                            : 'Set as KABOOM! Book of the Month'
+                        }
+                        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all disabled:opacity-50 ${
+                          book.isFeaturedSelection
+                            ? 'bg-brand-brick text-white shadow-sm hover:bg-[#9c380c]'
+                            : 'text-brand-navy/50 hover:text-brand-brick hover:bg-brand-brick/10 border border-brand-navy/15'
+                        }`}
+                      >
+                        <Star
+                          size={13}
+                          className={book.isFeaturedSelection ? 'fill-white text-white' : 'text-current'}
+                        />
+                        <span>{book.isFeaturedSelection ? 'Active' : 'Set'}</span>
+                      </button>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
@@ -211,9 +262,9 @@ export default function AdminBooksPage() {
   )
 }
 
-function Tag({ label }) {
+function Tag({ label, className = 'bg-brand-sage/20 text-brand-navy/70' }) {
   return (
-    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-brand-sage/20 text-brand-navy/70">
+    <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${className}`}>
       {label}
     </span>
   )

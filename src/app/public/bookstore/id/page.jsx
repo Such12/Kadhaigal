@@ -67,7 +67,10 @@ export default function BookDetailPage() {
     { label: 'Language', value: languageName },
     { label: 'ISBN', value: book.isbn || book.industryIdentifiers?.[0]?.identifier },
     { label: 'Condition', value: book.isUsed ? (book.conditionNote ? `Pre-loved (${book.conditionNote})` : 'Pre-loved') : 'New' },
-    { label: 'Binding / Format', value: book.isSelfPublished ? (book.printLocation ? `Self-Published (${book.printLocation})` : 'Self-Published') : 'Paperback' },
+    {
+      label: 'Binding / Format',
+      value: book.binding || (book.isSelfPublished ? (book.printLocation ? `Self-Published (${book.printLocation})` : 'Self-Published') : 'Paperback'),
+    },
   ].filter((item) => item.value !== undefined && item.value !== null && String(item.value).trim() !== '')
 
   return (

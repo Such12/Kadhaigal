@@ -5,6 +5,7 @@ import { categories } from '../../data/categories.js'
 import { getBooks } from '../../lib/booksStore.js'
 
 const links = [
+  { label: 'Home', href: '/', end: true },
   { label: 'Books', href: '/bookstore', end: true },
   { label: "Children's Books", href: '/bookstore/kids' },
   { label: 'Events', href: '/events' },

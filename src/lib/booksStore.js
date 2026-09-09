@@ -35,12 +35,12 @@ function rowToBook(row) {
     rating: row.rating ?? undefined,
     staffNote: row.staff_note ?? undefined,
     mood: row.mood ?? undefined,
-    curatorNote: row.curator_note ?? undefined,
     isSelfPublished: row.is_self_published ?? false,
     printLocation: row.print_location ?? undefined,
     printNote: row.print_note ?? undefined,
     isUsed: row.is_used ?? false,
     conditionNote: row.condition_note ?? undefined,
+    binding: row.binding ?? undefined,
     quantity: row.quantity ?? undefined,
     discount: row.discount ?? undefined,
     value: row.value ?? undefined,
@@ -79,12 +79,12 @@ function bookToRow(book) {
   set('rating')
   set('staffNote', 'staff_note')
   set('mood')
-  set('curatorNote', 'curator_note')
   set('isSelfPublished', 'is_self_published')
   set('printLocation', 'print_location')
   set('printNote', 'print_note')
   set('isUsed', 'is_used')
   set('conditionNote', 'condition_note')
+  set('binding')
   set('quantity')
   set('discount')
   set('value')
@@ -221,4 +221,26 @@ export async function deleteBook(id) {
   clearBooksCache()
   const { error } = await supabase.from('books').delete().eq('id', id)
   if (error) throw error
+}
+
+export async function setKaboomBook(bookId, makeActive = true) {
+  clearBooksCache()
+  // Reset any previous featured selection
+  const { error: resetError } = await supabase
+    .from('books')
+    .update({ is_featured_selection: false })
+    .eq('is_featured_selection', true)
+  if (resetError) throw resetError
+
+  if (makeActive && bookId) {
+    const { data, error } = await supabase
+      .from('books')
+      .update({ is_featured_selection: true })
+      .eq('id', bookId)
+      .select()
+      .single()
+    if (error) throw error
+    return rowToBook(data)
+  }
+  return null
 }

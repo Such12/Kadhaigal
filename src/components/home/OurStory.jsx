@@ -60,29 +60,13 @@ export default function OurStory() {
           className={`transition-all duration-700 ease-out
             ${textIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
         >
-          <span className="font-hand text-2xl text-brand-sage">
-            How it all began
-          </span>
 
           <h2 className="relative mt-2 inline-block font-display text-4xl font-bold text-brand-navy sm:text-5xl">
             Our Story
-            <svg
-              viewBox="0 0 180 14"
-              className="absolute -bottom-3 left-0 h-3 w-40 text-brand-brick sm:w-48"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            >
-              <path d="M3 8c30-8 60-8 90-3s60 3 84-4" />
-            </svg>
           </h2>
 
           <p className="mt-8 font-body text-lg leading-relaxed text-brand-navy/90 sm:text-xl">
-            <span className="float-left mr-2 mt-1 font-display text-6xl font-bold leading-[0.8] text-brand-brick sm:text-7xl">
-              I
-            </span>
-            t started with a simple question over a filter coffee:{" "}
+            It started with a simple question over a filter coffee:{" "}
             <span className="font-display italic">
               "Why don't we build a home for the stories that haven't been
               told yet?"
@@ -90,28 +74,9 @@ export default function OurStory() {
           </p>
 
           <p className="mt-6 font-body text-base leading-relaxed text-brand-navy/75 sm:text-lg">
-            We're readers &mdash; the obsessive kind, the kind who press
-            books into people's hands and anxiously wait to hear what they
-            thought. We wanted a space that felt warm without being
-            precious, and open to everyone. We almost called it{" "}
-            <span className="line-through decoration-brand-brick/40">
-              All Things Beautiful
-            </span>
-            .
+            We love books, we love reading, we have a bunch of different hobbies and love trying out new things, we strongly believe in the power of community and love it when people come together, we love plant based food, and we LOVE Sahakarnagar.
           </p>
 
-          <div className="relative mt-10">
-            <span
-              aria-hidden="true"
-              className="absolute -left-3 -top-8 select-none font-display text-8xl text-brand-brick/15"
-            >
-              &ldquo;
-            </span>
-            <p className="relative font-hand text-3xl leading-tight text-brand-brick sm:text-4xl">
-              We called it Kadhaigal instead. Stories. All of them. Waiting
-              to be found.
-            </p>
-          </div>
         </div>
 
         {/* illustration column */}
@@ -121,12 +86,6 @@ export default function OurStory() {
             ${artIn ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
         >
           <div className="relative">
-            {/* hand-written speech bubble, the punchline to the illustration */}
-            <div className="absolute -right-2 -top-6 z-10 rotate-3 rounded-2xl rounded-bl-sm bg-white px-4 py-2 shadow-card sm:-right-8">
-              <span className="whitespace-nowrap font-hand text-lg text-brand-navy/80">
-                Somehow, it all balanced out.
-              </span>
-            </div>
 
             <img
               src={chintuBalancing}

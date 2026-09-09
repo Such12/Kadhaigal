@@ -5,6 +5,7 @@ import { getBookByIsbn } from '../../../lib/booksStore.js'
 import { allCategories } from '../../../data/categories.js'
 
 const GENRES = allCategories.map(c => c.name)
+const BINDINGS = ['Paperback', 'Hardback']
 
 function splitList(str) {
   if (!str) return []
@@ -44,6 +45,7 @@ function emptyForm() {
     badge: '',
     rating: '',
     mood: '',
+    binding: '',
     isStaffPick: false,
     staffBy: '',
     staffRole: '',
@@ -80,11 +82,12 @@ function bookToForm(book) {
     genre: book.genre ?? '',
     subGenre: book.subGenre ?? '',
     price: book.price ?? '',
-    quantity: book.quantity ?? '', 
+    quantity: book.quantity ?? '',
     originalPrice: book.originalPrice ?? '',
     badge: book.badge ?? '',
     rating: book.rating ?? '',
     mood: (book.mood ?? []).join(', '),
+    binding: book.binding ?? '',
     isStaffPick: !!book.isStaffPick,
     staffBy: book.staffNote?.by ?? '',
     staffRole: book.staffNote?.role ?? '',
@@ -132,6 +135,7 @@ function formToBook(form) {
     badge: (form.badge ?? '').trim() || undefined,
     rating: form.rating ? Number(form.rating) : undefined,
     mood: form.mood ? splitList(form.mood) : undefined,
+    binding: form.binding || undefined,
     isStaffPick: form.isStaffPick,
     staffNote: form.isStaffPick
       ? { by: (form.staffBy ?? '').trim(), role: (form.staffRole ?? '').trim(), quote: (form.staffQuote ?? '').trim(), body: (form.staffBody ?? '').trim() }
@@ -235,9 +239,6 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
 
   return (
     <div className="fixed inset-0 bg-brand-navy/40 flex items-center justify-center z-50 p-4">
-      {/* Fixed-height shell: header and footer are pinned outside the
-          scrolling area below, so they can never end up scrolled out of
-          view no matter how tall the form gets. */}
       <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
         <form onSubmit={handleSubmit} className="flex flex-col min-h-0 flex-1">
           <div className="flex items-center justify-between px-6 py-4 border-b border-brand-navy/10 shrink-0">
@@ -254,7 +255,6 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
           </div>
 
           <div className="px-6 py-5 space-y-6 overflow-y-auto flex-1 min-h-0">
-          {/* Entry mode toggle — add mode only */}
           {!isEdit && (
             <div className="flex rounded-lg border border-brand-navy/15 p-1 bg-brand-navy/[0.03] text-sm font-semibold">
               <button
@@ -278,7 +278,6 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
             </div>
           )}
 
-          {/* ISBN lookup — add mode with 'isbn' entry, or edit mode (as a refresh option) */}
           {(!isEdit ? entryMode === 'isbn' : true) && (
             <div>
               <label className="text-xs font-semibold text-brand-navy/60 mb-1.5 block">
@@ -359,9 +358,6 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                 <Field label="Language" hint="ISO code, e.g. en, ta">
                   <input value={form.language} onChange={(e) => set('language', e.target.value)} className={inputClass} />
                 </Field>
-                {/* <Field label="Categories" hint="Comma-separated, from Google Books" span={2}>
-                  <input value={form.allCategories} onChange={(e) => set('allCategories', e.target.value)} className={inputClass} />
-                </Field> */}
                 <Field label="Cover Image URL" span={2}>
                   <input value={form.thumbnail} onChange={(e) => set('thumbnail', e.target.value)} className={inputClass} />
                 </Field>
@@ -393,6 +389,14 @@ export default function BookFormModal({ mode, initialBook, saving, onClose, onSa
                     <option value="">Select a sub-genre…</option>
                     {allCategories.find(c => c.name === form.genre)?.tags.map(tag => (
                       <option key={tag} value={tag}>{tag}</option>
+                    ))}
+                  </select>
+                </Field>
+                <Field label="Binding">
+                  <select value={form.binding} onChange={(e) => set('binding', e.target.value)} className={inputClass}>
+                    <option value="">Select…</option>
+                    {BINDINGS.map((b) => (
+                      <option key={b} value={b}>{b}</option>
                     ))}
                   </select>
                 </Field>
