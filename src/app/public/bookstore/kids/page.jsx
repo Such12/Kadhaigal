@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import KidsBooksHero from '../../../../components/bookstore/KidsBooksHero.jsx'
-import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import StaffPicks from '../../../../components/bookstore/StaffPicks.jsx' // Reverted to original
 import KidsCategories from '../../../../components/bookstore/KidsCategories.jsx'
 import SubscriptionBox from '../../../../components/bookstore/SubscriptionBox.jsx'
@@ -26,8 +25,6 @@ export default function KidsBookstorePage() {
         }
       `}</style>
 
-      <BookstoreNavbar />
-      
       <KidsBooksHero />
       
       <div className="relative z-10 -mt-10">

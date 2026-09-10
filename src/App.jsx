@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop.jsx'
 
 import RootLayout from './app/layout.jsx'
@@ -15,7 +15,6 @@ import GenrePage from './app/public/bookstore/genre/page.jsx'
 import BookDetailPage from './app/public/bookstore/id/page.jsx'
 
 // admin pages
-import AdminLoginPage from './app/admin/login/page.jsx'
 import AdminDashboardPage from './app/admin/page.jsx'
 import AdminBooksPage from './app/admin/books/page.jsx'
 import AdminEventsPage from './app/admin/events/page.jsx'
@@ -51,7 +50,8 @@ export default function App() {
         </Route>
 
         {/* admin */}
-        <Route path="admin/login" element={<AdminLoginPage />} />
+        {/* /admin/login redirects to the unified login page */}
+        <Route path="admin/login" element={<Navigate to="/account/login" replace />} />
         <Route path="admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="books" element={<AdminBooksPage />} />

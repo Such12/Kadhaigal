@@ -45,7 +45,7 @@ export default function AdminAuthGuard({ children }) {
 
   if (status === 'unauthorized') {
     // Remember where they were headed so login can send them back.
-    return <Navigate to="/admin/login" state={{ from: location }} replace />
+    return <Navigate to="/account/login" state={{ from: location }} replace />
   }
 
   return children

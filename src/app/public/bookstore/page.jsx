@@ -63,8 +63,8 @@ export default function BookstorePage() {
 
   return (
     <>
-      {/* Hero includes logo, hamburger nav, and search bar */}
-      <BooksHero query={query} onQueryChange={handleQueryChange} />
+      {/* Hero section */}
+      <BooksHero />
 
       {/* Search results — shown below the hero when there is a query */}
       {query ? (

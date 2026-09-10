@@ -20,7 +20,7 @@ const STILLS = [
 
 function Sprockets() {
   return (
-    <div className="flex justify-between gap-2 bg-black px-3 py-2">
+    <div className="flex justify-between gap-2 bg-brand-navy px-3 py-2">
       {Array.from({ length: 28 }).map((_, i) => (
         <span key={i} className="h-2 w-3 shrink-0 rounded-[2px] bg-brand-cream/90" />
       ))}

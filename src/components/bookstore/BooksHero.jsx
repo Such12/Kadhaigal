@@ -1,14 +1,7 @@
-import { Link } from 'react-router-dom'
-import Button from '../ui/Button.jsx'
-import BookstoreNavbar from './BookstoreNavbar.jsx'
-import Pintoo from '../../assets/images/pintu sitting on books.svg'
-import border from '../../assets/images/border.svg'
 import heroImg from '../../assets/images/1000066070.jpg'
-
-export default function BooksHero({ query, onQueryChange }) {
+export default function BooksHero() {
   return (
     <>
-      <BookstoreNavbar query={query} onQueryChange={onQueryChange} />
 
       {/* ── NEW HERO SECTION WITH IMAGE (FULL WIDTH & TOP/BOTTOM CROPPED) ── */}
       <section className="w-full overflow-hidden bg-[#c43d26]">

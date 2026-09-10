@@ -3,7 +3,6 @@ import { useParams, useLocation } from 'react-router-dom'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import BookListingCard from '../../../../components/bookstore/BookListingCard.jsx'
 import BookFilters from '../../../../components/bookstore/BookFilters.jsx'
-import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import { getBooksByGenre, getBooksBySubGenre } from '../../../../lib/booksStore.js'
 import { categories } from '../../../../data/categories.js'
 import { kidsCategories } from '../../../../data/kidsCategories.js'
@@ -49,7 +48,6 @@ export default function GenrePage() {
 
   return (
     <>
-      <BookstoreNavbar />
       <div className="container-page py-16">
         <div className="text-center max-w-2xl mx-auto">
           <h1 className="font-display font-extrabold text-4xl sm:text-5xl text-brand-navy">

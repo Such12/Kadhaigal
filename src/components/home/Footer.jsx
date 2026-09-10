@@ -1,7 +1,10 @@
+import { useLocation } from 'react-router-dom'
 import Logo from './Logo.jsx'
 import { Instagram, MessageCircle, Mail } from 'lucide-react'
 
 export default function Footer() {
+  const { pathname } = useLocation()
+  if (pathname === '/account/login') return null
   const quickLinks = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },

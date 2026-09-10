@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom'
 import { BookOpen, ShoppingBag, ChevronDown } from 'lucide-react'
 import ImagePlaceholder from '../../../../components/ui/ImagePlaceholder.jsx'
 import AddToCartButton from '../../../../components/bookstore/AddToCartButton.jsx'
-import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import CuratorNote from '../../../../components/bookstore/CuratorNote.jsx'
 import RelatedBooks from '../../../../components/bookstore/RelatedBooks.jsx'
 import { getBookById, getBooksByGenre } from '../../../../lib/booksStore.js'
@@ -29,24 +28,18 @@ export default function BookDetailPage() {
 
   if (loading) {
     return (
-      <>
-        <BookstoreNavbar />
-        <div className="container-page py-16 text-brand-navy/50">Loading…</div>
-      </>
+      <div className="container-page py-16 text-brand-navy/50">Loading…</div>
     )
   }
 
   if (!book) {
     return (
-      <>
-        <BookstoreNavbar />
-        <div className="container-page py-16 text-center">
-          <h1 className="font-display font-bold text-2xl text-brand-navy">Book not found</h1>
-          <Link to="/bookstore" className="text-brand-brick underline mt-4 inline-block">
-            Back to the Stacks
-          </Link>
-        </div>
-      </>
+      <div className="container-page py-16 text-center">
+        <h1 className="font-display font-bold text-2xl text-brand-navy">Book not found</h1>
+        <Link to="/bookstore" className="text-brand-brick underline mt-4 inline-block">
+          Back to the Stacks
+        </Link>
+      </div>
     )
   }
 
@@ -74,9 +67,7 @@ export default function BookDetailPage() {
   ].filter((item) => item.value !== undefined && item.value !== null && String(item.value).trim() !== '')
 
   return (
-    <>
-      <BookstoreNavbar />
-      <div className="container-page py-16">
+    <div className="container-page py-16">
         {/* Top: cover + primary info */}
         <div className="grid md:grid-cols-[340px_1fr] gap-10 items-start">
           {book.imageLinks?.thumbnail ? (
@@ -202,6 +193,5 @@ export default function BookDetailPage() {
 
         <RelatedBooks books={related} />
       </div>
-    </>
   )
 }

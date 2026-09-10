@@ -15,6 +15,7 @@ export function CustomerAuthProvider({ children }) {
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      setLoading(false)
     })
 
     return () => sub.subscription.unsubscribe()
@@ -27,16 +28,19 @@ export function CustomerAuthProvider({ children }) {
       options: { data: { full_name: fullName } },
     })
     if (error) throw new Error(error.message)
+    setUser(data.user ?? null)
     return data
   }
 
   async function signIn(email, password) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw new Error(error.message)
+    setUser(data.user ?? null)
     return data
   }
 
   async function signOut() {
+    setUser(null)
     await supabase.auth.signOut()
   }
 

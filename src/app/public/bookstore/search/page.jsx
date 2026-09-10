@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import BookListingCard from '../../../../components/bookstore/BookListingCard.jsx'
-import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import { categories } from '../../../../data/categories.js'
 import { getBooks } from '../../../../lib/booksStore.js'
 
@@ -35,8 +34,6 @@ export default function BookstoreSearchPage() {
 
   return (
     <div className="min-h-screen bg-brand-cream text-brand-navy">
-      <BookstoreNavbar />
-
       <main className="container-page py-10 sm:py-16">
         {!query ? (
           <div className="rounded-[2rem] border border-brand-navy/10 bg-white/50 px-6 py-12 text-center shadow-sm">
