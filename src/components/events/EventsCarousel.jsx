@@ -33,7 +33,7 @@ export default function EventsCarousel({ title, subtitle, events, showFilter = f
         </div>
       </div>
 
-      <div ref={scrollerRef} className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
+      <div ref={scrollerRef} className="flex gap-6 overflow-x-auto no-scrollbar pt-2 pb-6 pr-4">
         {events.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import EventsCarousel from '../../../components/events/EventsCarousel.jsx'
 import { getUpcomingEvents, getFeaturedEvents } from '../../../lib/eventsStore.js'
+import EventsHero from '../../../components/events/EventsHero.jsx'
+import WorkADayProgramme from '../../../components/events/WorkADayProgramme.jsx'
 
 export default function EventsPage() {
   const [featured, setFeatured] = useState([])
@@ -21,6 +23,7 @@ export default function EventsPage() {
 
   return (
     <>
+      <EventsHero />
       <EventsCarousel
         title="Featured Events"
         subtitle="The ones we're most excited about this month."
@@ -37,6 +40,7 @@ export default function EventsPage() {
           Nothing scheduled right now — check back soon.
         </p>
       )}
+      <WorkADayProgramme />
     </>
   )
 }
