@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { BookOpen, ShoppingBag, ChevronDown } from 'lucide-react'
 import ImagePlaceholder from '../../../../components/ui/ImagePlaceholder.jsx'
-import Button from '../../../../components/ui/Button.jsx'
+import AddToCartButton from '../../../../components/bookstore/AddToCartButton.jsx'
 import BookstoreNavbar from '../../../../components/bookstore/BookstoreNavbar.jsx'
 import CuratorNote from '../../../../components/bookstore/CuratorNote.jsx'
 import RelatedBooks from '../../../../components/bookstore/RelatedBooks.jsx'
@@ -117,12 +117,10 @@ export default function BookDetailPage() {
             </div>
 
             <div className="flex flex-wrap gap-3 mt-6">
-              <Button variant="primary">
-                <ShoppingBag size={16} /> Add to Cart
-              </Button>
-              <Button variant="light" className="border border-brand-navy/15">
+              <AddToCartButton book={book} />
+              <button className="inline-flex items-center justify-center gap-2 font-semibold px-6 py-3 rounded-full border border-brand-navy/15 text-brand-navy bg-white hover:bg-brand-cream transition-colors">
                 <BookOpen size={16} /> Buy Now
-              </Button>
+              </button>
             </div>
 
             {/* Product Details Section */}

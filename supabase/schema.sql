@@ -248,3 +248,53 @@ create policy "Admins can delete event images"
 alter table books
   drop column if exists curator_note,
   add column if not exists binding text;
+
+
+create table cart_items (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade not null,
+  book_id uuid references books(id) on delete cascade not null,
+  quantity integer not null default 1,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  unique (user_id, book_id) 
+);
+
+alter table cart_items enable row level security;
+
+create policy "Users can view own cart" on cart_items for select using (auth.uid() = user_id);
+create policy "Users can insert own cart items" on cart_items for insert with check (auth.uid() = user_id);
+create policy "Users can update own cart items" on cart_items for update using (auth.uid() = user_id);
+create policy "Users can delete own cart items" on cart_items for delete using (auth.uid() = user_id);
+
+
+
+create table profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  phone text,
+  created_at timestamptz default now()
+);
+
+alter table profiles enable row level security;
+
+create policy "Users can view own profile" on profiles for select using (auth.uid() = id);
+create policy "Users can update own profile" on profiles for update using (auth.uid() = id);
+create policy "Admins can view all profiles" on profiles for select using (is_admin());
+
+create or replace function handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (id, full_name)
+  values (new.id, new.raw_user_meta_data->>'full_name');
+  return new;
+end;
+$$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function handle_new_user();

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { ShoppingBag, User, Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 
@@ -14,6 +14,7 @@ const allLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
+  const navigate = useNavigate()
 
   // Bookstore pages have their own BookstoreNavbar
   if (pathname.startsWith('/bookstore')) return null
@@ -45,10 +46,10 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden md:flex items-center gap-5 text-brand-navy">
-          <button aria-label="Cart" className="hover:text-brand-brick transition-colors">
+          <button aria-label="Cart" onClick={() => navigate('/cart')} className="hover:text-brand-brick transition-colors">
             <ShoppingBag size={25} strokeWidth={1.8} />
           </button>
-          <button aria-label="Account" className="hover:text-brand-brick transition-colors">
+          <button aria-label="Account" onClick={() => navigate('/account')} className="hover:text-brand-brick transition-colors">
             <User size={25} strokeWidth={1.8} />
           </button>
         </div>
@@ -80,8 +81,12 @@ export default function Navbar() {
             ))}
           </ul>
           <div className="flex items-center gap-6 mt-5 text-brand-navy">
-            <ShoppingBag size={25} strokeWidth={1.8} />
-            <User size={25} strokeWidth={1.8} />
+            <button aria-label="Cart" onClick={() => { setOpen(false); navigate('/cart') }}>
+              <ShoppingBag size={25} strokeWidth={1.8} />
+            </button>
+            <button aria-label="Account" onClick={() => { setOpen(false); navigate('/account') }}>
+              <User size={25} strokeWidth={1.8} />
+            </button>
           </div>
         </div>
       )}

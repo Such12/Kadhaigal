@@ -22,8 +22,16 @@ import AdminEventsPage from './app/admin/events/page.jsx'
 import AdminOrdersPage from './app/admin/orders/page.jsx'
 import AdminSettingsPage from './app/admin/settings/page.jsx'
 
+import { CustomerAuthProvider } from './context/CustomerAuthContext.jsx'
+import { CartProvider } from './context/CartContext.jsx'
+import CustomerLoginPage from './app/public/account/login/page.jsx'
+import AccountPage from './app/public/account/page.jsx'
+import CartPage from './app/public/cart/page.jsx'
+
 export default function App() {
   return (
+      <CustomerAuthProvider>
+      <CartProvider>
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
@@ -37,6 +45,9 @@ export default function App() {
           <Route path="bookstore/kids" element={<KidsBookstorePage />} />
           <Route path="bookstore/genre/:genre" element={<GenrePage />} />
           <Route path="bookstore/:id" element={<BookDetailPage />} />
+          <Route path="account/login" element={<CustomerLoginPage />} />
+          <Route path="account" element={<AccountPage />} />
+          <Route path="cart" element={<CartPage />} />
         </Route>
 
         {/* admin */}
@@ -50,5 +61,7 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </CartProvider>
+    </CustomerAuthProvider>
   )
 }

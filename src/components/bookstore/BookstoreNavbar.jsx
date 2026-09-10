@@ -129,10 +129,10 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
             <Search size={25} strokeWidth={1.8} />
           </button>
 
-          <button aria-label="Cart" className="hover:text-brand-brick transition-colors hidden sm:block">
+          <button aria-label="Cart" onClick={() => navigate('/cart')} className="hover:text-brand-brick transition-colors hidden sm:block">
             <ShoppingBag size={25} strokeWidth={1.8} />
           </button>
-          <button aria-label="Account" className="hover:text-brand-brick transition-colors hidden sm:block">
+          <button aria-label="Account" onClick={() => navigate('/account')} className="hover:text-brand-brick transition-colors hidden sm:block">
             <User size={25} strokeWidth={1.8} />
           </button>
 
@@ -306,10 +306,10 @@ export default function BookstoreNavbar({ query = '', onQueryChange }) {
         </nav>
 
         <div className="flex items-center gap-5 px-6 py-6 border-t border-brand-navy/10 text-brand-navy">
-          <button aria-label="Cart" className="hover:text-brand-brick transition-colors">
+          <button aria-label="Cart" onClick={() => { setDrawerOpen(false); navigate('/cart') }} className="hover:text-brand-brick transition-colors">
             <ShoppingBag size={25} strokeWidth={1.8} />
           </button>
-          <button aria-label="Account" className="hover:text-brand-brick transition-colors">
+          <button aria-label="Account" onClick={() => { setDrawerOpen(false); navigate('/account') }} className="hover:text-brand-brick transition-colors">
             <User size={25} strokeWidth={1.8} />
           </button>
         </div>
