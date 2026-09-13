@@ -2,20 +2,23 @@
 //
 // Self-contained: the marquee keyframes live in a <style> tag right here,
 // so this works immediately without needing an edit to tailwind.config.js.
-// (Previously this relied on a custom `animate-film-scroll` utility that
-// only exists once matching keyframes are registered in the Tailwind
-// config — if that step is skipped, Tailwind just drops the class and
-// the strip sits still, which is what was happening.)
+
+import openMicImg from '../../assets/images/Open Mic.png'
+import bookClubImg from '../../assets/images/Book of the Month.png'
+import boardGameImg from '../../assets/images/Board Game.png'
+import curiousWedImg from '../../assets/images/Curious Wednesday.png'
+import authorVisitImg from '../../assets/images/Author Visit.png'
+import authorVisit2Img from '../../assets/images/Author Visit (2).png'
+import quizNightImg from '../../assets/images/Quiz Night.jpg'
 
 const STILLS = [
-  { seed: 'kadhaigal-openmic', caption: 'Open Mic Night' },
-  { seed: 'kadhaigal-bookclub', caption: 'Weekend Book Club' },
-  { seed: 'kadhaigal-boardgame', caption: 'Board Game Sunday' },
-  { seed: 'kadhaigal-poetry', caption: 'Poetry Reading' },
-  { seed: 'kadhaigal-author', caption: 'Author Meetup' },
-  { seed: 'kadhaigal-baking', caption: 'Baking Workshop' },
-  { seed: 'kadhaigal-swap', caption: 'Community Swap' },
-  { seed: 'kadhaigal-quiz', caption: 'Quiz Night' },
+  { src: openMicImg, caption: 'Open Mic Night' },
+  { src: bookClubImg, caption: 'Book of the Month' },
+  { src: boardGameImg, caption: 'Board Game Sunday' },
+  { src: curiousWedImg, caption: 'Curious Wednesday' },
+  { src: authorVisitImg, caption: 'Author Meetup' },
+  { src: authorVisit2Img, caption: 'Author Visit' },
+  { src: quizNightImg, caption: 'Quiz Night' },
 ]
 
 function Sprockets() {
@@ -28,12 +31,12 @@ function Sprockets() {
   )
 }
 
-function FilmCell({ seed, caption }) {
+function FilmCell({ src, caption }) {
   return (
     <figure className="w-56 shrink-0 border-x border-black/40 bg-black px-2 pb-3 pt-2 sm:w-64">
       <div className="aspect-[4/3] overflow-hidden bg-brand-navy/40">
         <img
-          src={`https://picsum.photos/seed/${seed}/480/360`}
+          src={src}
           alt={caption}
           loading="lazy"
           className="h-full w-full object-cover"
@@ -73,7 +76,7 @@ export default function FilmReel() {
       <div className="overflow-hidden bg-black">
         <div className="film-track flex w-max">
           {track.map((still, i) => (
-            <FilmCell key={`${still.seed}-${i}`} {...still} />
+            <FilmCell key={`${still.caption}-${i}`} {...still} />
           ))}
         </div>
       </div>
